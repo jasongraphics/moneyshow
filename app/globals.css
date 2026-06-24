@@ -266,6 +266,29 @@ footer { padding: 54px 0 40px; border-top: 1px solid var(--hair); font-size: 14p
 .kohortt-info { display: flex; flex-direction: column; }
 .kohortt-points { display: flex; flex-direction: column; gap: 18px; }
 
+/* high-tech net-worth panel (host's real ~8억) */
+.nw-panel { position: relative; overflow: hidden; border-radius: 16px; padding: 22px 22px 16px; color: #e8f2ee; background: linear-gradient(160deg, #0e141b, #0a0e13 55%, #0b1117); border: 1px solid rgba(60, 200, 160, .18); box-shadow: 0 26px 60px rgba(0, 0, 0, .32), inset 0 1px 0 rgba(255, 255, 255, .03); }
+.nw-mesh { position: absolute; inset: 0; background-image: linear-gradient(rgba(120, 255, 214, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 255, 214, .06) 1px, transparent 1px); background-size: 34px 34px; -webkit-mask-image: radial-gradient(120% 95% at 72% 22%, #000 35%, transparent 92%); mask-image: radial-gradient(120% 95% at 72% 22%, #000 35%, transparent 92%); }
+.nw-glow { position: absolute; right: -8%; top: -25%; width: 62%; height: 88%; background: radial-gradient(circle, rgba(45, 240, 176, .22), transparent 70%); filter: blur(22px); }
+.nw-top { position: relative; display: flex; align-items: center; justify-content: space-between; }
+.nw-label { display: flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 13px; font-weight: 600; color: #a7ecd2; letter-spacing: .2px; }
+.nw-live { width: 7px; height: 7px; border-radius: 50%; background: #3df0b0; box-shadow: 0 0 9px #3df0b0; animation: nwlive 1.7s ease-in-out infinite; }
+.nw-tag { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; color: #5d7d74; }
+.nw-figure { position: relative; display: flex; align-items: baseline; gap: 7px; margin-top: 12px; font-family: var(--sans); }
+.nw-pre { font-size: 16px; font-weight: 600; color: #7f978f; }
+.nw-amt { font-size: 52px; font-weight: 800; letter-spacing: -.02em; color: #fff; line-height: 1; font-variant-numeric: tabular-nums; text-shadow: 0 0 26px rgba(45, 240, 176, .4); }
+.nw-unit { font-size: 22px; font-weight: 700; color: #87e8c6; }
+.nw-sub { position: relative; margin-top: 9px; font-family: var(--sans); font-size: 12.5px; color: #7f978f; }
+.nw-chart { position: relative; display: block; width: 100%; height: auto; margin-top: 10px; overflow: visible; }
+.nw-linepath { stroke-dasharray: 100; stroke-dashoffset: 100; animation: nwdraw 1.9s cubic-bezier(.4, 0, .1, 1) .2s forwards; }
+.nw-node { filter: drop-shadow(0 0 5px #5cffc4); }
+.nw-ring { opacity: 0; animation: nwnode 2.4s ease-out 2s infinite; }
+.nw-axis { position: relative; display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--sans); font-size: 10px; letter-spacing: 1px; color: #5d7d74; font-variant-numeric: tabular-nums; }
+@keyframes nwdraw { to { stroke-dashoffset: 0; } }
+@keyframes nwlive { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+@keyframes nwnode { 0% { r: 5px; opacity: .8; } 75% { r: 15px; opacity: 0; } 100% { r: 15px; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .nw-linepath { animation: none; stroke-dashoffset: 0; } .nw-live, .nw-ring { animation: none; } }
+
 @media (max-width: 880px) {
   .nav-links, .nav-cta .btn-ghost, .nav-cta .btn-primary { display: none; }
   .hamb { display: inline-flex; }
@@ -274,6 +297,7 @@ footer { padding: 54px 0 40px; border-top: 1px solid var(--hair); font-size: 14p
   .g3, .benefits, .tcards { grid-template-columns: 1fr; }
   .plans { grid-template-columns: 1fr; }
   .about, #portfolio .about { grid-template-columns: 1fr; gap: 28px; }
+  .nw-amt { font-size: 44px; }
   .lead-band { padding: 30px 24px; gap: 22px; }
   .lead-band > div { width: 100%; }
   .lead-form { flex-direction: column; align-items: stretch; width: 100%; }

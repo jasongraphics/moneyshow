@@ -345,6 +345,66 @@ function LeadMagnet() {
   );
 }
 
+// ── Net-worth panel (high-tech chart, host's real ~8억 net worth) ────────────────
+function NetWorthPanel() {
+  // count up to 8 (억) on mount for a "live data" feel; starts at final to avoid SSR flash
+  const [n, setN] = useState(8);
+  useEffect(() => {
+    const dur = 1500;
+    const start = performance.now();
+    setN(0);
+    let raf = requestAnimationFrame(function tick(t) {
+      const p = Math.min(1, (t - start) / dur);
+      setN((1 - Math.pow(1 - p, 3)) * 8);
+      if (p < 1) raf = requestAnimationFrame(tick);
+      else setN(8);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  const amount = n >= 7.95 ? "8" : n.toFixed(1);
+
+  const LINE =
+    "M0,190 L40,182 L80,188 L120,166 L160,172 L200,148 L240,138 L280,146 L320,116 L360,98 L400,106 L440,74 L480,56 L520,42 L556,28";
+
+  return (
+    <div className="nw-panel">
+      <div className="nw-mesh" aria-hidden />
+      <div className="nw-glow" aria-hidden />
+      <div className="nw-top">
+        <span className="nw-label"><span className="nw-live" aria-hidden /> 제이슨의 순자산</span>
+        <span className="nw-tag">NET WORTH · KRW</span>
+      </div>
+      <div className="nw-figure">
+        <span className="nw-pre">약</span>
+        <span className="nw-amt">{amount}</span>
+        <span className="nw-unit">억원</span>
+      </div>
+      <div className="nw-sub">화려한 비법이 아니라, 꾸준함이 쌓인 결과예요.</div>
+      <svg className="nw-chart" viewBox="0 0 560 220" aria-hidden>
+        <defs>
+          <linearGradient id="nwArea" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#22e3a6" stopOpacity="0.30" />
+            <stop offset="1" stopColor="#22e3a6" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="nwLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#0f9b86" />
+            <stop offset="1" stopColor="#3df0b0" />
+          </linearGradient>
+          <filter id="nwGlow" x="-20%" y="-60%" width="140%" height="220%">
+            <feGaussianBlur stdDeviation="5" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+        <path d={`${LINE} L556,220 L0,220 Z`} fill="url(#nwArea)" />
+        <path className="nw-linepath" pathLength={100} d={LINE} fill="none" stroke="url(#nwLine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" filter="url(#nwGlow)" />
+        <circle className="nw-ring" cx="556" cy="28" r="5" fill="none" stroke="#5cffc4" strokeWidth="1.5" />
+        <circle className="nw-node" cx="556" cy="28" r="4" fill="#7dffce" />
+      </svg>
+      <div className="nw-axis"><span>&apos;21</span><span>&apos;22</span><span>&apos;23</span><span>&apos;24</span><span>&apos;25</span><span>지금</span></div>
+    </div>
+  );
+}
+
 // ── Portfolio tracker (kohortt cross-promo) ─────────────────────────────────────
 const KOHORTT_POINTS: { title: string; desc: string; path: React.ReactNode }[] = [
   { title: "원화 순자산", desc: "미국주식·현금·부동산·부채를 합쳐, 환율 자동 반영된 순자산을 원화로.", path: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M16 12h.01M3 10h18" /></> },
@@ -361,19 +421,12 @@ function PortfolioSection() {
     >
       <div className="wrap">
         <div className="sec-head">
-          <div className="eyebrow">포트폴리오 트래커 · 무료</div>
-          <h2>내 자산, 한눈에 보면서 함께 가요</h2>
-          <p>흩어진 미국주식·현금·부동산·부채를 한 곳에 모아, 지금 내 순자산이 원화로 얼마인지 바로 보여주는 무료 도구예요. 종목 추천이 아니라, 내 상황을 또렷이 보는 데서 시작해요.</p>
+          <div className="eyebrow">멤버십 포함 · 포트폴리오 트래커</div>
+          <h2>내 모든 자산을, 순자산 하나로</h2>
+          <p>미국주식·현금·부동산·부채까지 흩어진 자산을 모아, 지금 순자산이 원화로 얼마인지 보여주는 도구예요. 제가 매일 쓰는 도구이고, 멤버십에 포함됩니다. 지금은 베타라 무료로 미리 써볼 수 있어요.</p>
         </div>
         <div className="about">
-          <div className="kohortt-frame">
-            <div className="kohortt-bar">
-              <span className="kdot" aria-hidden /><span className="kdot" aria-hidden /><span className="kdot" aria-hidden />
-              <span className="kurl">kohortt.com</span>
-            </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="kohortt-shot" src="/kohortt-dashboard.webp" alt="kohortt 포트폴리오 대시보드 미리보기" width={1760} height={1064} />
-          </div>
+          <NetWorthPanel />
           <div className="kohortt-info">
             <div className="kohortt-points">
               {KOHORTT_POINTS.map((b) => (
@@ -391,7 +444,7 @@ function PortfolioSection() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b08d3c" strokeWidth="2">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
-              구글 로그인 30초 · 베타 기간 무료 · 카드 필요 없음
+              멤버십에 포함되는 도구 · 지금은 베타라 무료로 체험
             </div>
             <a
               className="btn btn-primary"
@@ -400,12 +453,12 @@ function PortfolioSection() {
               rel="noreferrer noopener"
               style={{ marginTop: 22, alignSelf: "flex-start" }}
             >
-              포트폴리오 트래커 열기 ↗
+              베타로 미리 써보기 ↗
             </a>
           </div>
         </div>
         <p className="muted" style={{ textAlign: "center", fontSize: 12.5, marginTop: 18 }}>
-          제이슨의 머니쇼와 같은 팀이 만든 도구예요 · kohortt.com
+          멤버십을 열면 영상·커뮤니티와 함께 하나로 제공돼요 · kohortt
         </p>
       </div>
     </section>
@@ -483,6 +536,7 @@ function Pricing({ onWaitlist }: { onWaitlist: () => void }) {
             <div className="price">₩9,900 <small>/ 월 (예정)</small></div>
             <div className="price-sub">오픈 시 얼리버드 혜택 예정</div>
             <ul>
+              <li><CheckIcon /> 포트폴리오 트래커 kohortt 포함</li>
               <li><CheckIcon /> 전체 영상 콘텐츠 라이브러리</li>
               <li><CheckIcon /> 매주 추가되는 새 영상</li>
               <li><CheckIcon /> 전자책·엑셀 템플릿 전체</li>
