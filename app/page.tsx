@@ -15,6 +15,9 @@ const SITE = {
   // 프로필 일러스트(아바타). public/ 폴더에 파일을 넣고 경로만 바꾸면 됩니다.
   avatar: "/jason-avatar.webp",
 
+  // 문의 이메일 (선택). 비워두면 "유튜브·인스타 DM" 안내가 표시됩니다.
+  contactEmail: "",
+
   // Email signups. Paste a form endpoint to make the forms REAL.
   //   • Formspree:   https://formspree.io  → "https://formspree.io/f/abcdxyz"
   //   • Buttondown:  https://buttondown.email  (form action URL)
@@ -32,14 +35,14 @@ const FREE_VIDEOS: { youtubeId: string; title: string; desc: string; duration: s
   { youtubeId: "", title: "흔들리지 않는 투자 마인드셋", desc: "소음에 휘둘리지 않고 오래 버티는 사고법.", duration: "9분" },
 ];
 
-// 멤버십에서 준비 중인 강의 (오픈 예정). 자유롭게 수정하세요.
+// 멤버십에서 준비 중인 영상 콘텐츠 (오픈 예정). 자유롭게 수정하세요.
 const PREMIUM_VIDEOS = [
   { title: "미국 ETF 완전 분석 시리즈", desc: "S&P500·나스닥100·배당 ETF를 깊이 있게.", meta: "6편 · 총 72분", thumb: "" },
   { title: "포트폴리오 설계 워크숍", desc: "자산배분 프레임워크를 내 상황에 적용하기.", meta: "4편 · 총 58분", thumb: "alt" },
-  { title: "절세계좌 200% 활용 강의", desc: "ISA·연금·IRP를 한도까지 굴리는 실전 순서.", meta: "5편 · 총 64분", thumb: "alt2" },
+  { title: "절세계좌 200% 활용 이야기", desc: "ISA·연금·IRP를 한도까지 굴리는 실전 순서.", meta: "5편 · 총 64분", thumb: "alt2" },
   { title: "월배당 현금흐름 만들기", desc: "배당 ETF로 매달 들어오는 흐름 설계하기.", meta: "3편 · 총 41분", thumb: "alt" },
   { title: "시장 폭락 대응 플레이북", desc: "흔들릴 때 팔지 않는 사람의 체크리스트.", meta: "3편 · 총 37분", thumb: "alt2" },
-  { title: "연말정산 절세 실전", desc: "연금·ISA로 환급을 극대화하는 시즌 강의.", meta: "4편 · 총 49분", thumb: "" },
+  { title: "연말정산 절세 실전", desc: "연금·ISA로 환급을 극대화하는 시즌 영상.", meta: "4편 · 총 49분", thumb: "" },
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -334,11 +337,11 @@ function PremiumSection({ onWaitlist }: { onWaitlist: () => void }) {
       <div className="wrap">
         <div className="sec-head">
           <div className="eyebrow">멤버십 · 준비 중</div>
-          <h2>더 깊은 강의, 멤버십으로 준비하고 있어요</h2>
-          <p>무료 콘텐츠를 충분히 보신 분들을 위해 체계적인 영상 강의와 실전 자료를 만들고 있습니다. 오픈하면 가장 먼저 알려드릴게요.</p>
+          <h2>더 깊은 이야기, 멤버십으로 준비하고 있어요</h2>
+          <p>무료 콘텐츠를 충분히 보신 분들을 위해 차근차근 정리한 영상과 실전 자료를 만들고 있습니다. 오픈하면 가장 먼저 알려드릴게요.</p>
         </div>
         <div className="premium-tools">
-          <span className="muted" style={{ fontSize: 14 }}>아래는 준비 중인 강의 미리보기입니다 · 매주 추가 예정</span>
+          <span className="muted" style={{ fontSize: 14 }}>아래는 준비 중인 영상 미리보기입니다 · 매주 추가 예정</span>
           <button className="btn btn-primary" onClick={onWaitlist}>오픈 알림 받기</button>
         </div>
         <div className="grid g3">
@@ -391,12 +394,12 @@ function Pricing({ onWaitlist }: { onWaitlist: () => void }) {
           </div>
           <div className="plan">
             <div className="pname">멤버십 <span className="soon-pill">곧 오픈</span></div>
-            <div className="pdesc">더 깊이 배우고 싶은 분께</div>
+            <div className="pdesc">더 깊이 함께 공부하고 싶은 분께</div>
             <div className="price">₩9,900 <small>/ 월 (예정)</small></div>
             <div className="price-sub">오픈 시 얼리버드 혜택 예정</div>
             <ul>
-              <li><CheckIcon /> 전체 영상 강의 라이브러리</li>
-              <li><CheckIcon /> 매주 추가되는 새 강의</li>
+              <li><CheckIcon /> 전체 영상 콘텐츠 라이브러리</li>
+              <li><CheckIcon /> 매주 추가되는 새 영상</li>
               <li><CheckIcon /> 전자책·엑셀 템플릿 전체</li>
               <li><CheckIcon /> 멤버 전용 Q&amp;A 커뮤니티</li>
             </ul>
@@ -580,8 +583,12 @@ function Footer() {
           </div>
         </div>
         <div className="disclaimer">
-          사업자 정보: (상호) · (대표) · (사업자등록번호) · (통신판매업신고번호) · (주소) · (연락처) — 실제 정보로 교체하세요.<br /><br />
-          본 사이트의 모든 콘텐츠는 일반적인 금융·투자 교육 및 정보 제공을 목적으로 하며, 특정 종목의 매수·매도 추천이나 투자자문이 아닙니다. 운영자는 자본시장법상 금융투자업(투자자문업 등) 인가·등록을 받은 자가 아닙니다. 모든 투자 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다. © 2026 제이슨의 머니쇼.
+          {SITE.contactEmail ? (
+            <>문의: <a href={`mailto:${SITE.contactEmail}`} style={{ textDecoration: "underline" }}>{SITE.contactEmail}</a><br /><br /></>
+          ) : (
+            <>문의는 유튜브·인스타그램 채널 메시지로 받습니다.<br /><br /></>
+          )}
+          본 사이트의 모든 콘텐츠는 일반적인 정보 제공 및 교육 목적이며, 특정 종목의 매수·매도 추천이나 투자자문이 아닙니다. 운영자는 자본시장법상 금융투자업(투자자문업 등) 인가·등록을 받은 자가 아니며, 콘텐츠는 어떠한 수익도 보장하지 않습니다. 모든 투자 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다. © 2026 제이슨의 머니쇼.
         </div>
       </div>
     </footer>
