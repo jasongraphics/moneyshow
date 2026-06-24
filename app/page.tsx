@@ -15,6 +15,9 @@ const SITE = {
   // 프로필 일러스트(아바타). public/ 폴더에 파일을 넣고 경로만 바꾸면 됩니다.
   avatar: "/jason-avatar.webp",
 
+  // 포트폴리오 트래커(kohortt) 주소.
+  kohortt: "https://kohortt.com",
+
   // 문의 이메일 (선택). 비워두면 "유튜브·인스타 DM" 안내가 표시됩니다.
   contactEmail: "",
 
@@ -113,6 +116,7 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const links = [
     { href: "#free", label: "무료 콘텐츠" },
+    { href: "#portfolio", label: "포트폴리오" },
     { href: "#membership", label: "멤버십" },
     { href: "#about", label: "소개" },
     { href: "#faq", label: "FAQ" },
@@ -137,23 +141,37 @@ function Navbar() {
             <YouTubeGlyph /> 구독
           </a>
           <a className="btn btn-primary" href="#ebook">무료로 시작</a>
-          <button className="hamb" aria-label="menu" onClick={() => setMobileOpen((v) => !v)}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b1915" strokeWidth="1.8">
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            </svg>
+          <button
+            className="hamb"
+            aria-label={mobileOpen ? "메뉴 닫기" : "메뉴 보기"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? "닫기" : "메뉴보기"}
           </button>
         </div>
       </div>
       {mobileOpen && (
         <div className="mobile-menu">
           {links.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
+            <a key={l.href} href={l.href} className="mm-link" onClick={() => setMobileOpen(false)}>
               {l.label}
             </a>
           ))}
-          <a href={SITE.youtube} target="_blank" rel="noreferrer noopener" style={{ color: "var(--ink)", fontWeight: 600 }}>
-            유튜브 구독 ↗
-          </a>
+          <div className="mm-cta">
+            <a className="btn btn-primary btn-block" href="#ebook" onClick={() => setMobileOpen(false)}>
+              무료로 시작
+            </a>
+            <a
+              className="btn btn-ghost btn-block"
+              href={SITE.youtube}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => setMobileOpen(false)}
+            >
+              <YouTubeGlyph /> 유튜브 구독
+            </a>
+          </div>
         </div>
       )}
     </header>
@@ -322,6 +340,73 @@ function LeadMagnet() {
             <div className="lead-note">{note}</div>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Portfolio tracker (kohortt cross-promo) ─────────────────────────────────────
+const KOHORTT_POINTS: { title: string; desc: string; path: React.ReactNode }[] = [
+  { title: "원화 순자산", desc: "미국주식·현금·부동산·부채를 합쳐, 환율 자동 반영된 순자산을 원화로.", path: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M16 12h.01M3 10h18" /></> },
+  { title: "자산 배분 한눈에", desc: "어디에 얼마나 쏠려 있는지 배분 파이로 확인하고 균형을 점검해요.", path: <><path d="M12 3a9 9 0 1 0 9 9h-9z" /><path d="M12 3v9" /></> },
+  { title: "제이슨과 비교하기", desc: "커뮤니티에서 제 포트폴리오와 내 것을 나란히 놓고 볼 수 있어요.", path: <><circle cx="9" cy="8" r="3" /><path d="M3.5 20a5.5 5.5 0 0 1 11 0M16 11l2 2 4-4" /></> },
+  { title: "은퇴 목표 추적", desc: "목표 금액까지 얼마나 왔는지, 배당 현금흐름까지 함께 따라가요.", path: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><path d="M12 12h.01" /></> },
+];
+
+function PortfolioSection() {
+  return (
+    <section
+      id="portfolio"
+      style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}
+    >
+      <div className="wrap">
+        <div className="sec-head">
+          <div className="eyebrow">포트폴리오 트래커 · 무료</div>
+          <h2>내 자산, 한눈에 보면서 함께 가요</h2>
+          <p>흩어진 미국주식·현금·부동산·부채를 한 곳에 모아, 지금 내 순자산이 원화로 얼마인지 바로 보여주는 무료 도구예요. 종목 추천이 아니라, 내 상황을 또렷이 보는 데서 시작해요.</p>
+        </div>
+        <div className="about">
+          <div className="kohortt-frame">
+            <div className="kohortt-bar">
+              <span className="kdot" aria-hidden /><span className="kdot" aria-hidden /><span className="kdot" aria-hidden />
+              <span className="kurl">kohortt.com</span>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="kohortt-shot" src="/kohortt-dashboard.webp" alt="kohortt 포트폴리오 대시보드 미리보기" width={1760} height={1064} />
+          </div>
+          <div className="kohortt-info">
+            <div className="kohortt-points">
+              {KOHORTT_POINTS.map((b) => (
+                <div className="benefit" key={b.title}>
+                  <div className="ic">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1b1915" strokeWidth="1.6">
+                      {b.path}
+                    </svg>
+                  </div>
+                  <div><h4>{b.title}</h4><p>{b.desc}</p></div>
+                </div>
+              ))}
+            </div>
+            <div className="hero-trust" style={{ marginTop: 22 }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b08d3c" strokeWidth="2">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              구글 로그인 30초 · 베타 기간 무료 · 카드 필요 없음
+            </div>
+            <a
+              className="btn btn-primary"
+              href={SITE.kohortt}
+              target="_blank"
+              rel="noreferrer noopener"
+              style={{ marginTop: 22, alignSelf: "flex-start" }}
+            >
+              포트폴리오 트래커 열기 ↗
+            </a>
+          </div>
+        </div>
+        <p className="muted" style={{ textAlign: "center", fontSize: 12.5, marginTop: 18 }}>
+          제이슨의 머니쇼와 같은 팀이 만든 도구예요 · kohortt.com
+        </p>
       </div>
     </section>
   );
@@ -565,6 +650,7 @@ function Footer() {
           <div className="foot-col">
             <h5>콘텐츠</h5>
             <a href="#free">무료 콘텐츠</a>
+            <a href="#portfolio">포트폴리오 트래커</a>
             <a href="#membership">멤버십</a>
             <a href="#ebook">무료 eBook</a>
             <a href="#about">소개</a>
@@ -691,6 +777,7 @@ export default function Home() {
       <HonestBar />
       <FreeContent onPlay={play} />
       <LeadMagnet />
+      <PortfolioSection />
       <PremiumSection onWaitlist={openWaitlist} />
       <Pricing onWaitlist={openWaitlist} />
       <Benefits />
