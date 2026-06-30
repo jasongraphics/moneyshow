@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { GA_ID } from "./lib/site";
 import "./globals.css";
 
 // 사이트 주소 — 커스텀 도메인을 연결하면 이 값을 바꿔주세요.
@@ -56,6 +58,8 @@ export default function RootLayout({
         />
       </head>
       <body>{children}</body>
+      {/* 모든 페이지(자료실·링크 포함)에 Google Analytics 4 적용. 라우트 이동도 자동 추적됩니다. */}
+      {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
     </html>
   );
 }

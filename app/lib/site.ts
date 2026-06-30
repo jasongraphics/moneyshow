@@ -21,6 +21,15 @@ export const SITE = {
   contactEmail: "",
 };
 
+// ───────────────────────────────────────────────────────────────────────────
+//  Google Analytics 4 측정 ID — 예: "G-XXXXXXXXXX"
+//  analytics.google.com → 관리(⚙️) → 데이터 스트림 → 웹 스트림 에서 확인돼요.
+//  아래 따옴표 안에 붙여넣으면 모든 페이지에 자동 적용됩니다.
+//  (Vercel 환경변수 NEXT_PUBLIC_GA_ID 를 설정하면 그 값이 우선합니다.)
+//  비워두면 추적이 그냥 꺼져요 — 에러는 나지 않습니다.
+// ───────────────────────────────────────────────────────────────────────────
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-WNG4JJ8S62";
+
 // SNS 채널. 메인 CTA가 아니라 "이런 곳에서 활동해요" 목록으로 노출됩니다.
 export const CHANNELS: { type: "youtube" | "instagram"; label: string; handle: string; href: string }[] = [
   { type: "youtube", label: "YouTube", handle: "@Jasonsmoneyshow", href: SITE.youtube },
