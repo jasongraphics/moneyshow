@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE } from "../lib/site";
+import { SITE, DISCLAIMER } from "../lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "제이슨의 머니쇼 · 링크" },
@@ -59,7 +59,11 @@ export default function LinksPage() {
           <a href={SITE.instagram} target="_blank" rel="noreferrer noopener" aria-label="Instagram"><IGMono /></a>
         </div>
 
-        <div className="lt-foot">교육·정보 목적 · 투자 권유 아님 · © 2026 제이슨의 머니쇼</div>
+        <div className="lt-foot">
+          <strong className="lt-foot-h">투자 유의사항 · 면책 고지</strong>
+          {DISCLAIMER}
+          <span className="lt-foot-c">© 2026 제이슨의 머니쇼 · 문의는 유튜브·인스타그램 채널로</span>
+        </div>
       </div>
     </main>
   );
