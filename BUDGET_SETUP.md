@@ -21,7 +21,7 @@
 
 1. dashboard.stripe.com → **Product catalog → 상품 추가**
    - 이름: `제이슨의 머니쇼 가계부 2026`
-   - 가격: **9,900 KRW**, **One-time(일회성)**
+   - 가격: **12,000 KRW**, **One-time(일회성)**
    - ⚠️ 내 Stripe 계정이 **KRW 결제**를 지원하는지 확인하세요. 안 되면 USD로 설정해도 됩니다(가격 라벨은 `app/lib/product.ts`에서 수정).
 2. 만들어진 **Price ID**(`price_...`) 복사 → `STRIPE_PRICE_ID`
 3. Developers → API keys → **Secret key**(`sk_live_...`, 테스트는 `sk_test_...`) 복사 → `STRIPE_SECRET_KEY`

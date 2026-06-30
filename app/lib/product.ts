@@ -7,7 +7,7 @@
 //  넣어주세요. 아래 네 가지를 채우면 결제가 자동으로 켜집니다.
 //
 //    STRIPE_SECRET_KEY        sk_live_... (테스트는 sk_test_...)   ← 서버 전용, 절대 공개 금지
-//    STRIPE_PRICE_ID          price_...   Stripe 대시보드에서 만든 ₩9,900 가격 ID
+//    STRIPE_PRICE_ID          price_...   Stripe 대시보드에서 만든 ₩12,000 가격 ID
 //    BUDGET_SHEET_COPY_URL    https://docs.google.com/spreadsheets/d/<시트ID>/copy
 //    STRIPE_WEBHOOK_SECRET    whsec_...   (이메일 자동발송 등 웹훅을 쓸 때만, 선택)
 //
@@ -17,7 +17,7 @@ export const PRODUCT = {
   // 화면에 노출되는 상품 이름
   name: "제이슨의 머니쇼 가계부 2026",
   // 표시용 가격. 실제 청구 금액은 Stripe Price(STRIPE_PRICE_ID)가 결정합니다.
-  priceLabel: "₩9,900",
+  priceLabel: "₩12,000",
 };
 
 // 가격(Price) ID는 비밀이 아니라서 코드에 기본값으로 둡니다. Vercel에 STRIPE_PRICE_ID 를
