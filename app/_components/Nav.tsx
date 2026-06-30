@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SITE, NAV, CHANNELS } from "../lib/site";
+import SiteFonts from "./SiteFonts";
 
 function YouTubeGlyph({ size = 18 }: { size?: number }) {
   return (
@@ -44,6 +45,8 @@ export default function Nav({ active }: { active?: string }) {
   const close = () => setMobileOpen(false);
 
   return (
+    <>
+    <SiteFonts />
     <header className="nav" id="topnav">
       <div className="wrap nav-in">
         <Link href="/" className="brand brand-row" onClick={close}>
@@ -100,5 +103,6 @@ export default function Nav({ active }: { active?: string }) {
         </div>
       )}
     </header>
+    </>
   );
 }

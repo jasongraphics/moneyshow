@@ -42,19 +42,15 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        {/* Pretendard (the body/UI font for every page) via dynamic-subset variable font:
+            only the glyphs actually on the page download (per unicode-range), instead of the
+            full ~780KB-per-weight static font. The heavier display fonts (Gowun Batang, Gaegu)
+            load only on content pages via <SiteFonts> in <Nav>, so the /links linktree — which
+            uses Pretendard only — never pays for them. */}
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap"
-          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>
       <body>{children}</body>

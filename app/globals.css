@@ -14,7 +14,7 @@
   --maxw: 1120px;
   --serif: "Gowun Batang", "Noto Serif KR", serif;
   --wordmark: "Gaegu", "Gowun Batang", "Pretendard", system-ui, cursive;
-  --sans: "Pretendard", "Pretendard Variable", -apple-system, system-ui, sans-serif;
+  --sans: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
