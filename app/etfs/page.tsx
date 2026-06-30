@@ -6,9 +6,9 @@ import ETFTable from "./ETFTable";
 import { LISTING_COMPARE, GLOSSARY } from "../lib/data";
 
 export const metadata: Metadata = {
-  title: "ETF 자료실 · 보수·세금 한눈에 비교",
+  title: "ETF 자료실 · 지수·상장·세금 한눈에 비교",
   description:
-    "S&P500·나스닥100·미국 전체시장·전세계·다우·배당·모멘텀 ETF를, 국내상장(원화)과 해외상장(달러)으로 나눠 총보수와 세금까지 한 표에서 비교하세요. 교육용 팩트시트.",
+    "S&P500·나스닥100·미국 전체시장·전세계·다우·배당·모멘텀 ETF를, 국내상장(원화)과 해외상장(달러)으로 나눠 추종 지수와 세금까지 한 표에서 비교하세요. 교육용 팩트시트.",
 };
 
 export default function ETFsPage() {
@@ -28,7 +28,7 @@ export default function ETFsPage() {
           </p>
           <div className="updated">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0e7a52" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-            마지막 업데이트: 2026.06 · 보수는 운용사 공시 기준
+            마지막 업데이트: 2026.06 · 세부 수치는 운용사 공시 기준
           </div>
         </div>
       </header>
@@ -47,7 +47,7 @@ export default function ETFsPage() {
           <div className="rhead" style={{ marginTop: 36 }}>
             <div className="eyebrow">팩트시트</div>
             <h2>ETF 비교표</h2>
-            <p>카테고리·상장으로 거르고, ‘총보수’를 눌러 정렬해 보세요. 보수 막대는 표시된 ETF 중 상대적인 비용입니다.</p>
+            <p>카테고리와 상장(국내·해외)으로 걸러서, 같은 지수를 추종하는 ETF들을 한눈에 비교해 보세요.</p>
           </div>
           <ETFTable />
         </div>
