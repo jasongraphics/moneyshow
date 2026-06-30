@@ -561,6 +561,7 @@ table.dtable { width: 100%; border-collapse: collapse; font-size: 14.5px; min-wi
 .lt-btn.ghost:hover { background: #111; color: #fff; transform: translateY(-2px); }
 .lt-btn.feature { background: #0e7a52; color: #fff; border-color: #0e7a52; }
 .lt-btn.feature:hover { background: #0b5c3e; border-color: #0b5c3e; transform: translateY(-2px); }
+.lt-btn.soon { background: #f4f4f5; color: #9a9a9a; border-color: #e4e4e7; cursor: default; }
 .lt-socials { display: flex; gap: 14px; margin-top: 22px; }
 .lt-socials a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; border-radius: 12px; opacity: .9; transition: transform .15s, opacity .15s; }
 .lt-socials a:hover { opacity: 1; transform: translateY(-2px); }
