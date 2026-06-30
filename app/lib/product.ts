@@ -20,7 +20,9 @@ export const PRODUCT = {
   priceLabel: "₩9,900",
 };
 
-export const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || "";
+// 가격(Price) ID는 비밀이 아니라서 코드에 기본값으로 둡니다. Vercel에 STRIPE_PRICE_ID 를
+// 넣으면 그 값이 우선합니다. (가격을 바꾸면 Stripe에서 새 Price를 만들고 이 값만 교체.)
+export const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || "price_1ToAnY7WIuqBWZw2v2BbqWnM";
 export const BUDGET_SHEET_COPY_URL = process.env.BUDGET_SHEET_COPY_URL || "";
 
 /** 결제 기능이 켜져 있는지 — 서버 키와 가격 ID가 모두 있어야 합니다. (서버에서만 신뢰 가능) */
