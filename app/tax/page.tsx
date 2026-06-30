@@ -39,7 +39,7 @@ export default function TaxPage() {
             <div className="eyebrow">Part 03 · 과세 vs 비과세</div>
             <h2>알아야 할 세금은 세 가지</h2>
           </div>
-          <div className="hub-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+          <div className="hub-grid tax-3up">
             {TAXES.map((t) => (
               <div className="hubcard" key={t.kind} style={{ cursor: "default" }}>
                 <div className="crumb" style={{ marginBottom: 8 }}>{t.kind}</div>
@@ -94,6 +94,7 @@ export default function TaxPage() {
               </tbody>
             </table>
           </div>
+          <p className="scroll-hint" aria-hidden="true">표를 좌우로 넘겨서 모든 항목을 볼 수 있어요</p>
           <p className="tfoot-note">
             국내상장 ETF는 증권거래세가 면제됩니다. 미국 배당은 미국에서 15% 원천징수되며, 한·미 조세조약상 국내 추가 배당세는 일반적으로 크지 않으나 종합과세 대상에는 포함됩니다.
             국내상장 vs 해외상장 비교는 <Link href="/etfs" style={{ color: "var(--accent)", fontWeight: 700 }}>ETF 자료실</Link>에서 더 자세히 볼 수 있어요.
@@ -143,6 +144,7 @@ export default function TaxPage() {
               </tbody>
             </table>
           </div>
+          <p className="scroll-hint" aria-hidden="true">표를 좌우로 넘겨서 모든 항목을 볼 수 있어요</p>
           <p className="tfoot-note">
             세액공제율은 총급여 5,500만원(종합소득 4,500만원) 이하 16.5%, 초과 13.2%입니다.
             ISA의 납입·비과세 한도 확대(이른바 ‘슈퍼 ISA’: 연 4,000만 / 총 2억, 비과세 500만·1,000만, 분리과세율 인하)는 <strong>2026년 현재 확정이 아니라 추진·논의 중</strong>입니다. 위 표에는 현행 기준과 확대안을 함께 적었어요. 가입 전 증권사·기획재정부 발표로 최신 기준을 꼭 확인하세요.

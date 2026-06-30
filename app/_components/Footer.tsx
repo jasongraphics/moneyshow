@@ -7,7 +7,7 @@ export default function Footer() {
     <footer>
       <div className="wrap">
         <div className="foot-top">
-          <div className="foot-col" style={{ maxWidth: 280 }}>
+          <div className="foot-col brand-col">
             <div className="brand" style={{ fontSize: 18, marginBottom: 8 }}>제이슨의 머니쇼</div>
             <p className="muted" style={{ fontSize: 13.5 }}>
               흔들리지 않는 장기투자, 한국 투자자를 위한 미국주식·ETF·절세 이야기.

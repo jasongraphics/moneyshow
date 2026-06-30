@@ -104,7 +104,7 @@ const HUB: { href: string; t: string; d: string; p: React.ReactNode }[] = [
 
 function ResourceHub() {
   return (
-    <section id="library" style={{ paddingTop: 60, paddingBottom: 60 }}>
+    <section id="library">
       <div className="wrap">
         <div className="sec-head">
           <div className="eyebrow">자료실 · 전부 무료</div>

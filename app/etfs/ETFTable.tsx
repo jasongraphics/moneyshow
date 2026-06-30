@@ -44,6 +44,14 @@ export default function ETFTable() {
         <button className={listing === "all" ? "on" : ""} onClick={() => setListing("all")}>전체</button>
         <button className={listing === "KR" ? "on" : ""} onClick={() => setListing("KR")}>국내 (원화)</button>
         <button className={listing === "US" ? "on" : ""} onClick={() => setListing("US")}>해외 (달러)</button>
+        <button
+          className={sort !== "default" ? "on" : ""}
+          onClick={toggleSort}
+          style={{ marginLeft: "auto" }}
+          aria-label="총보수 기준 정렬"
+        >
+          총보수순 {arrow}
+        </button>
       </div>
 
       <div className="tablewrap">
@@ -83,6 +91,7 @@ export default function ETFTable() {
           </tbody>
         </table>
       </div>
+      <p className="scroll-hint" aria-hidden="true">표를 좌우로 넘겨서 모든 항목을 볼 수 있어요</p>
 
       <p className="tfoot-note">
         총 {rows.length}개 표시 중{cheapest ? ` · 이 조건에서 보수가 가장 낮은 건 ` : ""}
