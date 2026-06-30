@@ -49,6 +49,7 @@ export default function LinksPage() {
 
         <nav className="lt-links">
           <a className="lt-btn primary" href="/">흔들리지 않는 투자 · 무료 자료실</a>
+          <a className="lt-btn feature" href="/budget">가계부 템플릿 2026 · ₩9,900</a>
           <a className="lt-btn ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
             유튜브 · 제이슨의 머니쇼
           </a>

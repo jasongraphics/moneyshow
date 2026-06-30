@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Third-party source files (do not commit / redistribute)
+*Budget Template*.xlsx
+*Budget Template*.pdf
