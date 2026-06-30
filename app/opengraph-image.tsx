@@ -5,7 +5,7 @@ import { ImageResponse } from "next/og";
 // on KakaoTalk, X, Threads, Facebook, iMessage, etc.
 
 export const runtime = "nodejs";
-export const alt = "JASON'S MONEY SHOW — Investing without the noise";
+export const alt = "JASON'S MONEY SHOW · Investing without the noise";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -33,11 +33,11 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 6,
             fontWeight: 700,
-            color: "#b08d3c",
+            color: "#0e7a52",
             textTransform: "uppercase",
           }}
         >
-          <div style={{ width: 44, height: 4, background: "#b08d3c", display: "flex" }} />
+          <div style={{ width: 44, height: 4, background: "#0e7a52", display: "flex" }} />
           US Stocks · ETF · Tax
         </div>
 
@@ -47,7 +47,7 @@ export default function OpengraphImage() {
             JASON&apos;S MONEY SHOW
           </div>
           <div style={{ display: "flex", fontSize: 34, color: "#3a372f", marginTop: 26, lineHeight: 1.35, maxWidth: 880 }}>
-            Investing, without the noise — one regular person&apos;s honest journey.
+            Investing without the noise. One regular person&apos;s honest journey.
           </div>
         </div>
 
@@ -58,7 +58,7 @@ export default function OpengraphImage() {
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <div style={{ width: 60, height: 12, borderRadius: 6, background: "#3f5e44", display: "flex" }} />
-            <div style={{ width: 24, height: 12, borderRadius: 6, background: "#b08d3c", display: "flex" }} />
+            <div style={{ width: 24, height: 12, borderRadius: 6, background: "#0e7a52", display: "flex" }} />
           </div>
         </div>
       </div>

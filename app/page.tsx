@@ -1,97 +1,15 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  ✏️  EDIT ME — all your links, videos, and content live in this one block.
-//      Everything below this block is layout you usually won't need to touch.
-// ═══════════════════════════════════════════════════════════════════════════
-
-const SITE = {
-  // Your channels. Paste the full URLs.
-  youtube: "https://www.youtube.com/@Jasonsmoneyshow",
-  instagram: "https://www.instagram.com/", // ← 인스타 주소를 넣으세요
-
-  // 프로필 일러스트(아바타). public/ 폴더에 파일을 넣고 경로만 바꾸면 됩니다.
-  avatar: "/jason-avatar.webp",
-
-  // 포트폴리오 트래커(kohortt) 주소.
-  kohortt: "https://kohortt.com",
-
-  // 문의 이메일 (선택). 비워두면 "유튜브·인스타 DM" 안내가 표시됩니다.
-  contactEmail: "",
-
-  // Email signups. Paste a form endpoint to make the forms REAL.
-  //   • Formspree:   https://formspree.io  → "https://formspree.io/f/abcdxyz"
-  //   • Buttondown:  https://buttondown.email  (form action URL)
-  //   • ConvertKit / Mailchimp embedded form action URL also works.
-  // Leave it "" to run the forms in safe demo mode (no email is actually sent).
-  emailFormAction: "",
-};
-
-// 무료 영상 — 유튜브 영상 ID만 넣으면 썸네일·재생이 자동으로 연결됩니다.
-//   youtubeId = youtube.com/watch?v=★★★★★★★★★★★  의 ★ 부분 (11자)
-//   비워두면("") "곧 공개" 카드로 표시되고, 클릭 시 유튜브 채널로 이동합니다.
-const FREE_VIDEOS: { youtubeId: string; title: string; desc: string; duration: string }[] = [
-  { youtubeId: "", title: "미국주식 계좌, 5분에 개설하기", desc: "증권사 선택부터 첫 매수까지, 왕초보용 시작 가이드.", duration: "8분" },
-  { youtubeId: "", title: "ISA·연금으로 세금 줄이는 법", desc: "절세계좌 3종을 5분 만에 이해하는 핵심 정리.", duration: "11분" },
-  { youtubeId: "", title: "흔들리지 않는 투자 마인드셋", desc: "소음에 휘둘리지 않고 오래 버티는 사고법.", duration: "9분" },
-];
-
-// 멤버십에서 준비 중인 영상 콘텐츠 (오픈 예정). 자유롭게 수정하세요.
-const PREMIUM_VIDEOS = [
-  { title: "미국 ETF 완전 분석 시리즈", desc: "S&P500·나스닥100·배당 ETF를 깊이 있게.", meta: "6편 · 총 72분", thumb: "" },
-  { title: "포트폴리오 설계 워크숍", desc: "자산배분 프레임워크를 내 상황에 적용하기.", meta: "4편 · 총 58분", thumb: "alt" },
-  { title: "절세계좌 200% 활용 이야기", desc: "ISA·연금·IRP를 한도까지 굴리는 실전 순서.", meta: "5편 · 총 64분", thumb: "alt2" },
-  { title: "월배당 현금흐름 만들기", desc: "배당 ETF로 매달 들어오는 흐름 설계하기.", meta: "3편 · 총 41분", thumb: "alt" },
-  { title: "시장 폭락 대응 플레이북", desc: "흔들릴 때 팔지 않는 사람의 체크리스트.", meta: "3편 · 총 37분", thumb: "alt2" },
-  { title: "연말정산 절세 실전", desc: "연금·ISA로 환급을 극대화하는 시즌 영상.", meta: "4편 · 총 49분", thumb: "" },
-];
-
-// ═══════════════════════════════════════════════════════════════════════════
-
-const ytThumb = (id: string) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-const ytEmbed = (id: string) =>
-  `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
-
-/** POST an email to the configured form endpoint. Returns true on success
- *  (or in demo mode when no endpoint is set). Swap SITE.emailFormAction to
- *  make this capture real subscribers. */
-async function subscribeEmail(email: string, source: string): Promise<boolean> {
-  if (!SITE.emailFormAction) return true; // demo mode
-  try {
-    const res = await fetch(SITE.emailFormAction, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ email, source }),
-    });
-    return res.ok;
-  } catch {
-    return false;
-  }
-}
+import Link from "next/link";
+import Nav from "./_components/Nav";
+import Footer from "./_components/Footer";
+import NetWorthGraph from "./_components/NetWorthGraph";
+import PortfolioPie from "./_components/PortfolioPie";
+import { SITE, CHANNELS } from "./lib/site";
+import { useState, useEffect, useRef } from "react";
 
 // ── SVG helpers ──────────────────────────────────────────────────────────────
-const CheckIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3f5e44" strokeWidth="2.2">
-    <path d="M20 6 9 17l-5-5" />
-  </svg>
-);
-
-const PlayIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="#faf8f2">
-    <path d="M8 5v14l11-7z" />
-  </svg>
-);
-
-const LockIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1b1915" strokeWidth="1.7">
-    <rect x="5" y="11" width="14" height="9" rx="2" />
-    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-  </svg>
-);
-
-const YouTubeGlyph = ({ size = 18 }: { size?: number }) => (
+const YouTubeGlyph = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
     <path
       fill="#e23b2e"
@@ -101,115 +19,56 @@ const YouTubeGlyph = ({ size = 18 }: { size?: number }) => (
   </svg>
 );
 
-/** Circular doodle avatar. `className` controls size via CSS (.avatar-sm / .avatar-lg). */
-function Avatar({ className = "" }: { className?: string }) {
-  return (
-    <span className={`avatar-circle ${className}`} aria-hidden>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={SITE.avatar} alt="" />
-    </span>
-  );
-}
+const InstagramGlyph = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#c1399a" strokeWidth="2" aria-hidden>
+    <rect x="3" y="3" width="18" height="18" rx="5.2" />
+    <circle cx="12" cy="12" r="4.1" />
+    <circle cx="17.4" cy="6.6" r="1.15" fill="#c1399a" stroke="none" />
+  </svg>
+);
 
-// ── Navbar ────────────────────────────────────────────────────────────────────
-function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const links = [
-    { href: "#free", label: "무료 콘텐츠" },
-    { href: "#portfolio", label: "포트폴리오" },
-    { href: "#membership", label: "멤버십" },
-    { href: "#about", label: "소개" },
-    { href: "#faq", label: "FAQ" },
-  ];
-
+/** SNS channels shown as a quiet list, not a primary CTA. */
+function Channels({ center = false }: { center?: boolean }) {
   return (
-    <header className="nav" id="topnav" style={mobileOpen ? { position: "sticky", top: 0, zIndex: 50 } : undefined}>
-      <div className="wrap nav-in">
-        <a href="#top" className="brand brand-row">
-          <Avatar className="avatar-sm" />
-          <span className="brand-text">제이슨의 머니쇼<small>JASON&apos;S MONEY SHOW</small></span>
+    <div className={`channels${center ? " center" : ""}`}>
+      {CHANNELS.map((c) => (
+        <a key={c.type} className="ch" href={c.href} target="_blank" rel="noreferrer noopener">
+          {c.type === "youtube" ? <YouTubeGlyph /> : <InstagramGlyph />}
+          <span className="ch-l">{c.label}</span>
+          <span className="ch-h">{c.handle}</span>
         </a>
-        <nav className="nav-links">
-          {links.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-        </nav>
-        <div className="nav-cta">
-          <a className="btn btn-ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
-            <YouTubeGlyph /> 구독
-          </a>
-          <a className="btn btn-primary" href="#ebook">무료로 시작</a>
-          <button
-            className="hamb"
-            aria-label={mobileOpen ? "메뉴 닫기" : "메뉴 보기"}
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((v) => !v)}
-          >
-            {mobileOpen ? "닫기" : "메뉴보기"}
-          </button>
-        </div>
-      </div>
-      {mobileOpen && (
-        <div className="mobile-menu">
-          {links.map((l) => (
-            <a key={l.href} href={l.href} className="mm-link" onClick={() => setMobileOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-          <div className="mm-cta">
-            <a className="btn btn-primary btn-block" href="#ebook" onClick={() => setMobileOpen(false)}>
-              무료로 시작
-            </a>
-            <a
-              className="btn btn-ghost btn-block"
-              href={SITE.youtube}
-              target="_blank"
-              rel="noreferrer noopener"
-              onClick={() => setMobileOpen(false)}
-            >
-              <YouTubeGlyph /> 유튜브 구독
-            </a>
-          </div>
-        </div>
-      )}
-    </header>
+      ))}
+    </div>
   );
 }
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function Hero() {
   return (
-    <section className="hero" style={{ paddingTop: 70 }}>
+    <section className="hero" style={{ paddingTop: 36 }}>
       <div className="wrap">
-        <div className="hero-intro">
-          <Avatar className="avatar-lg" />
-          <span className="hero-hi">안녕하세요, 제이슨이에요 👋</span>
-        </div>
         <div className="eyebrow">미국주식 · ETF · 절세 · 평범한 사람의 투자 기록</div>
-        <h1>흔들리지 않는 투자,<br />함께 시작해요.</h1>
+        <h1>흔들리지 않는 투자,<br />여기서 시작해요.</h1>
         <p className="lead">
-          전문가의 비법이 아니라, 같은 길을 걷는 평범한 투자자의 기록입니다. 미국주식·ETF·절세를 왕초보 눈높이로 풀어드려요.
-          무료 영상으로 가볍게 시작하고, 새 글은 이메일로 받아보세요.
+          전문가의 비법이 아니라, 같은 길을 걷는 평범한 투자자의 기록입니다.
+          미국주식·ETF·절세와 복리의 힘을 왕초보 눈높이로, 이 사이트 안에서 전부 무료로 공부할 수 있어요.
         </p>
         <div className="hero-cta">
-          <a className="btn btn-primary" href="#ebook">무료 가이드 받기</a>
-          <a className="btn btn-ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
-            <YouTubeGlyph /> 유튜브 구독하기
-          </a>
+          <Link className="btn btn-primary" href="/start">투자, 어떻게 시작할까</Link>
+          <Link className="btn btn-ghost" href="/tools">복리 계산기 열기</Link>
         </div>
         <div className="hero-trust">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b08d3c" strokeWidth="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e7a52" strokeWidth="2">
             <path d="M20 6 9 17l-5-5" />
           </svg>
           유튜브·인스타그램에서 &apos;제이슨의 머니쇼&apos;를 운영합니다
         </div>
+        <Channels />
         <div className="pillrow">
           <span className="pill">미국주식 ETF</span>
           <span className="pill">국내상장 vs 해외상장</span>
           <span className="pill">ISA · 연금 · IRP 절세</span>
-          <span className="pill">장기투자 마인드셋</span>
+          <span className="pill">복리·장기투자</span>
         </div>
       </div>
     </section>
@@ -235,269 +94,33 @@ function HonestBar() {
   );
 }
 
-// ── Free Content ──────────────────────────────────────────────────────────────
-function FreeContent({ onPlay }: { onPlay: (id: string) => void }) {
-  const thumbVariants = ["", "alt", "alt2"];
-  return (
-    <section id="free">
-      <div className="wrap">
-        <div className="sec-head">
-          <div className="eyebrow">무료 콘텐츠</div>
-          <h2>무료로 먼저 보기</h2>
-          <p>핵심만 담은 무료 영상으로 가볍게 시작하세요. 더 많은 영상은 유튜브 채널에서 이어집니다.</p>
-        </div>
-        <div className="grid g3">
-          {FREE_VIDEOS.map((v, i) => {
-            const live = Boolean(v.youtubeId);
-            const card = (
-              <>
-                <div className={`thumb${thumbVariants[i % 3] ? " " + thumbVariants[i % 3] : ""}`}>
-                  {live && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img className="thumb-img" src={ytThumb(v.youtubeId)} alt="" />
-                  )}
-                  <span className="tag-free">무료</span>
-                  {live ? (
-                    <div className="play"><PlayIcon /></div>
-                  ) : (
-                    <span className="badge-soon">곧 공개</span>
-                  )}
-                </div>
-                <div className="body">
-                  <h4>{v.title}</h4>
-                  <p>{v.desc}</p>
-                  <div className="meta">영상 · {v.duration}</div>
-                </div>
-              </>
-            );
-            return live ? (
-              <button key={v.title} className="card card-btn" onClick={() => onPlay(v.youtubeId)}>
-                {card}
-              </button>
-            ) : (
-              <a key={v.title} className="card card-btn" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
-                {card}
-              </a>
-            );
-          })}
-        </div>
-        <div className="free-foot">
-          <a className="btn btn-ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
-            <YouTubeGlyph /> 유튜브에서 더 보기
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Lead Magnet ───────────────────────────────────────────────────────────────
-function LeadMagnet() {
-  const [note, setNote] = useState("스팸 없이, 새 글과 영상 소식만 가끔 보내드려요.");
-  const [email, setEmail] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || busy) return;
-    setBusy(true);
-    const ok = await subscribeEmail(email, "ebook");
-    setBusy(false);
-    if (ok) {
-      setNote(
-        SITE.emailFormAction
-          ? "✓ 등록되었습니다. 메일함에서 체크리스트를 확인하세요!"
-          : "✓ 등록되었습니다! (데모 — 이메일 폼을 연결하면 실제로 발송됩니다)"
-      );
-      setEmail("");
-    } else {
-      setNote("앗, 잠시 후 다시 시도해 주세요.");
-    }
-  };
-
-  return (
-    <section id="ebook" style={{ paddingTop: 20 }}>
-      <div className="wrap">
-        <div className="lead-band">
-          <div>
-            <div className="eyebrow" style={{ color: "#cda349" }}>무료 eBook</div>
-            <h3>「미국주식 시작 체크리스트」를 무료로 받으세요</h3>
-            <p>이메일만 남기면, 계좌 개설부터 첫 매수까지 한 장으로 정리한 PDF 체크리스트를 보내드립니다.</p>
-          </div>
-          <div>
-            <form className="lead-form" onSubmit={handleSubmit}>
-              <input
-                type="email"
-                placeholder="이메일 주소"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button className="btn btn-gold" type="submit" disabled={busy}>
-                {busy ? "등록 중…" : "무료로 받기"}
-              </button>
-            </form>
-            <div className="lead-note">{note}</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Net-worth panel (high-tech chart, host's real ~8억 net worth) ────────────────
-function NetWorthPanel() {
-  // count up to 8 (억) on mount for a "live data" feel; starts at final to avoid SSR flash
-  const [n, setN] = useState(8);
-  useEffect(() => {
-    const dur = 1500;
-    const start = performance.now();
-    setN(0);
-    let raf = requestAnimationFrame(function tick(t) {
-      const p = Math.min(1, (t - start) / dur);
-      setN((1 - Math.pow(1 - p, 3)) * 8);
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else setN(8);
-    });
-    return () => cancelAnimationFrame(raf);
-  }, []);
-  const amount = n >= 7.95 ? "8" : n.toFixed(1);
-
-  const LINE =
-    "M0,190 L40,182 L80,188 L120,166 L160,172 L200,148 L240,138 L280,146 L320,116 L360,98 L400,106 L440,74 L480,56 L520,42 L556,28";
-
-  return (
-    <div className="nw-panel">
-      <div className="nw-mesh" aria-hidden />
-      <div className="nw-glow" aria-hidden />
-      <div className="nw-top">
-        <span className="nw-label"><span className="nw-live" aria-hidden /> 제이슨의 순자산</span>
-        <span className="nw-tag">NET WORTH · KRW</span>
-      </div>
-      <div className="nw-figure">
-        <span className="nw-pre">약</span>
-        <span className="nw-amt">{amount}</span>
-        <span className="nw-unit">억원</span>
-      </div>
-      <div className="nw-sub">화려한 비법이 아니라, 꾸준함이 쌓인 결과예요.</div>
-      <svg className="nw-chart" viewBox="0 0 560 220" aria-hidden>
-        <defs>
-          <linearGradient id="nwArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#22e3a6" stopOpacity="0.30" />
-            <stop offset="1" stopColor="#22e3a6" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="nwLine" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#0f9b86" />
-            <stop offset="1" stopColor="#3df0b0" />
-          </linearGradient>
-          <filter id="nwGlow" x="-20%" y="-60%" width="140%" height="220%">
-            <feGaussianBlur stdDeviation="5" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
-        <path d={`${LINE} L556,220 L0,220 Z`} fill="url(#nwArea)" />
-        <path className="nw-linepath" pathLength={100} d={LINE} fill="none" stroke="url(#nwLine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" filter="url(#nwGlow)" />
-        <circle className="nw-ring" cx="556" cy="28" r="5" fill="none" stroke="#5cffc4" strokeWidth="1.5" />
-        <circle className="nw-node" cx="556" cy="28" r="4" fill="#7dffce" />
-      </svg>
-      <div className="nw-axis"><span>&apos;21</span><span>&apos;22</span><span>&apos;23</span><span>&apos;24</span><span>&apos;25</span><span>지금</span></div>
-    </div>
-  );
-}
-
-// ── Portfolio tracker (kohortt cross-promo) ─────────────────────────────────────
-const KOHORTT_POINTS: { title: string; desc: string; path: React.ReactNode }[] = [
-  { title: "원화 순자산", desc: "미국주식·현금·부동산·부채를 합쳐, 환율 자동 반영된 순자산을 원화로.", path: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M16 12h.01M3 10h18" /></> },
-  { title: "자산 배분 한눈에", desc: "어디에 얼마나 쏠려 있는지 배분 파이로 확인하고 균형을 점검해요.", path: <><path d="M12 3a9 9 0 1 0 9 9h-9z" /><path d="M12 3v9" /></> },
-  { title: "제이슨과 비교하기", desc: "커뮤니티에서 제 포트폴리오와 내 것을 나란히 놓고 볼 수 있어요.", path: <><circle cx="9" cy="8" r="3" /><path d="M3.5 20a5.5 5.5 0 0 1 11 0M16 11l2 2 4-4" /></> },
-  { title: "은퇴 목표 추적", desc: "목표 금액까지 얼마나 왔는지, 배당 현금흐름까지 함께 따라가요.", path: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><path d="M12 12h.01" /></> },
+// ── 자료실 허브 (resource hub) ──────────────────────────────────────────────────
+const HUB: { href: string; t: string; d: string; p: React.ReactNode }[] = [
+  { href: "/start", t: "시작하기", d: "흔들리지 않는 7가지 원칙과, 첫 계좌부터 첫 매수까지의 순서.", p: <path d="M5 12h14M13 6l6 6-6 6" /> },
+  { href: "/etfs", t: "ETF 자료실", d: "S&P500·나스닥·전세계·배당까지, 보수와 세금을 한 표에서 비교.", p: <path d="M4 19V5M4 19h16M8 16v-5M13 16V8M18 16v-9" /> },
+  { href: "/tools", t: "복리 계산기", d: "매달 얼마면 30년 뒤 얼마가 될까. 시간의 힘을 숫자로.", p: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></> },
+  { href: "/tax", t: "세금 가이드", d: "양도세·배당세·종합과세와 ISA·연금·IRP 절세계좌 순서.", p: <><path d="M4 4h12l4 4v12H4z" /><path d="M8 12h8M8 16h6" /></> },
 ];
 
-function PortfolioSection() {
+function ResourceHub() {
   return (
-    <section
-      id="portfolio"
-      style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}
-    >
+    <section id="library" style={{ paddingTop: 60, paddingBottom: 60 }}>
       <div className="wrap">
         <div className="sec-head">
-          <div className="eyebrow">멤버십 포함 · 포트폴리오 트래커</div>
-          <h2>내 모든 자산을, 순자산 하나로</h2>
-          <p>미국주식·현금·부동산·부채까지 흩어진 자산을 모아, 지금 순자산이 원화로 얼마인지 보여주는 도구예요. 제가 매일 쓰는 도구이고, 멤버십에 포함됩니다. 지금은 베타라 무료로 미리 써볼 수 있어요.</p>
+          <div className="eyebrow">자료실 · 전부 무료</div>
+          <h2>필요한 건 전부 사이트 안에 있어요</h2>
+          <p>인덱스 투자와 ETF를 처음 공부하는 분이 ‘시작점’으로 삼을 수 있는 자료와 도구입니다. 다운로드도 가입도 필요 없어요.</p>
         </div>
-        <div className="about">
-          <NetWorthPanel />
-          <div className="kohortt-info">
-            <div className="kohortt-points">
-              {KOHORTT_POINTS.map((b) => (
-                <div className="benefit" key={b.title}>
-                  <div className="ic">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1b1915" strokeWidth="1.6">
-                      {b.path}
-                    </svg>
-                  </div>
-                  <div><h4>{b.title}</h4><p>{b.desc}</p></div>
-                </div>
-              ))}
-            </div>
-            <div className="hero-trust" style={{ marginTop: 22 }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b08d3c" strokeWidth="2">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
-              멤버십에 포함되는 도구 · 지금은 베타라 무료로 체험
-            </div>
-            <a
-              className="btn btn-primary"
-              href={SITE.kohortt}
-              target="_blank"
-              rel="noreferrer noopener"
-              style={{ marginTop: 22, alignSelf: "flex-start" }}
-            >
-              베타로 미리 써보기 ↗
-            </a>
-          </div>
-        </div>
-        <p className="muted" style={{ textAlign: "center", fontSize: 12.5, marginTop: 18 }}>
-          멤버십을 열면 영상·커뮤니티와 함께 하나로 제공돼요 · kohortt
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// ── Membership (coming soon) ────────────────────────────────────────────────────
-function PremiumSection({ onWaitlist }: { onWaitlist: () => void }) {
-  return (
-    <section
-      id="membership"
-      style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}
-    >
-      <div className="wrap">
-        <div className="sec-head">
-          <div className="eyebrow">멤버십 · 준비 중</div>
-          <h2>더 깊은 이야기, 멤버십으로 준비하고 있어요</h2>
-          <p>무료 콘텐츠를 충분히 보신 분들을 위해 차근차근 정리한 영상과 실전 자료를 만들고 있습니다. 오픈하면 가장 먼저 알려드릴게요.</p>
-        </div>
-        <div className="premium-tools">
-          <span className="muted" style={{ fontSize: 14 }}>아래는 준비 중인 영상 미리보기입니다 · 매주 추가 예정</span>
-          <button className="btn btn-primary" onClick={onWaitlist}>오픈 알림 받기</button>
-        </div>
-        <div className="grid g3">
-          {PREMIUM_VIDEOS.map((v) => (
-            <button key={v.title} className="card locked card-btn" onClick={onWaitlist}>
-              <div className={`thumb${v.thumb ? " " + v.thumb : ""}`}>
-                <span className="tag-lock">준비 중</span>
-                <div className="blur" />
-                <div className="lockwrap">
-                  <div className="lockbadge"><LockIcon /></div>
-                </div>
+        <div className="hub-grid">
+          {HUB.map((h) => (
+            <Link key={h.href} href={h.href} className="hubcard">
+              <div className="kic">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1b1915" strokeWidth="1.6">{h.p}</svg>
               </div>
-              <div className="body">
-                <h4>{v.title}</h4>
-                <p>{v.desc}</p>
-                <div className="meta">{v.meta}</div>
-              </div>
-            </button>
+              <h3>{h.t}</h3>
+              <p>{h.d}</p>
+              <div className="go">열어보기 →</div>
+            </Link>
           ))}
         </div>
       </div>
@@ -505,46 +128,67 @@ function PremiumSection({ onWaitlist }: { onWaitlist: () => void }) {
   );
 }
 
-// ── Pricing ───────────────────────────────────────────────────────────────────
-function Pricing({ onWaitlist }: { onWaitlist: () => void }) {
+// ── Warren Buffett quote → 복리 계산기 ───────────────────────────────────────────
+function BuffettQuote() {
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    const i = imgRef.current;
+    if (i && i.complete && i.naturalWidth > 0) setLoaded(true);
+  }, []);
   return (
-    <section id="pricing">
+    <section style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}>
+      <div className="wrap">
+        <div className="quotewrap">
+          <span className="quote-face" title="public/buffett.jpg 에 사진을 넣으세요">
+            <span className="quote-ph" aria-hidden>
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5">
+                <circle cx="12" cy="9" r="3.6" />
+                <path d="M4.5 20.5c0-4.2 3.4-6.8 7.5-6.8s7.5 2.6 7.5 6.8" />
+              </svg>
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img ref={imgRef} className={`quote-photo${loaded ? " on" : ""}`} src={SITE.buffettPhoto} alt="워런 버핏" onLoad={() => setLoaded(true)} />
+          </span>
+          <div className="quote-body">
+            <div className="eyebrow">복리의 힘</div>
+            <blockquote className="bigquote">
+              “오늘 누군가 나무 그늘에서 쉴 수 있는 건, 아주 오래 전에 누군가 그 나무를 심었기 때문입니다.”
+            </blockquote>
+            <div className="quote-attr">워런 버핏 · 버크셔 해서웨이</div>
+            <p className="quote-lead">
+              일찍 시작해서 오래 두는 것만으로 돈이 스스로 불어납니다. 매달 얼마면 30년 뒤 얼마가 되는지, 직접 숫자로 확인해 보세요.
+            </p>
+            <Link className="btn btn-primary" href="/tools">복리 계산기 열어보기</Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Portfolio (real holdings, transparent, not a recommendation) ─────────────────
+function PortfolioSection() {
+  return (
+    <section id="portfolio">
       <div className="wrap">
         <div className="sec-head">
-          <div className="eyebrow">요금제</div>
-          <h2>지금은 전부 무료로 시작하세요</h2>
-          <p>무료 콘텐츠와 뉴스레터는 지금 바로 이용할 수 있어요. 멤버십은 준비가 되면 합리적인 가격으로 오픈할 예정입니다.</p>
+          <div className="eyebrow">투명하게 · 제 실제 포트폴리오</div>
+          <h2>제 포트폴리오를 그대로 공개해요</h2>
+          <p>
+            화려한 비법이 아니라, 꾸준히 모은 결과예요. 제가 실제로 들고 있는 자산을 사실 그대로 보여드립니다.
+            따라 사라는 추천이 아니라, ‘저는 이렇게 굴리고 있어요’라는 기록이에요.
+          </p>
         </div>
-        <div className="plans">
-          <div className="plan feat">
-            <div className="feat-flag">지금 이용 가능</div>
-            <div className="pname">무료</div>
-            <div className="pdesc">지금 바로 시작하는 분께</div>
-            <div className="price">₩0</div>
-            <div className="price-sub">신용카드 필요 없음</div>
-            <ul>
-              <li><CheckIcon /> 무료 영상 콘텐츠</li>
-              <li><CheckIcon /> 미국주식 시작 체크리스트 eBook</li>
-              <li><CheckIcon /> 새 글·영상 뉴스레터</li>
-              <li><CheckIcon /> 유튜브·인스타 커뮤니티</li>
-            </ul>
-            <a className="btn btn-primary btn-block" href="#ebook">무료로 시작</a>
-          </div>
-          <div className="plan">
-            <div className="pname">멤버십 <span className="soon-pill">곧 오픈</span></div>
-            <div className="pdesc">더 깊이 함께 공부하고 싶은 분께</div>
-            <div className="price">₩9,900 <small>/ 월 (예정)</small></div>
-            <div className="price-sub">오픈 시 얼리버드 혜택 예정</div>
-            <ul>
-              <li><CheckIcon /> 포트폴리오 트래커 kohortt 포함</li>
-              <li><CheckIcon /> 전체 영상 콘텐츠 라이브러리</li>
-              <li><CheckIcon /> 매주 추가되는 새 영상</li>
-              <li><CheckIcon /> 전자책·엑셀 템플릿 전체</li>
-              <li><CheckIcon /> 멤버 전용 Q&amp;A 커뮤니티</li>
-            </ul>
-            <button className="btn btn-ghost btn-block" onClick={onWaitlist}>오픈 알림 받기</button>
-          </div>
+        <div className="pf-stack">
+          <NetWorthGraph />
+          <PortfolioPie />
         </div>
+        <p className="muted" style={{ fontSize: 12.5, marginTop: 18, lineHeight: 1.6, maxWidth: 820 }}>
+          실제 증권계좌 순자산(NLV) 기준이며 원화는 환율로 환산했습니다. 환율과 시세에 따라 수시로 바뀝니다.
+          현금이 소폭 신용(−)이라 비중 합계가 100%를 조금 넘습니다. 특정 종목의 매수·매도 추천이 아니라 보유 현황의 사실 공유이며,
+          투자 판단과 책임은 본인에게 있습니다.
+        </p>
       </div>
     </section>
   );
@@ -554,11 +198,11 @@ function Pricing({ onWaitlist }: { onWaitlist: () => void }) {
 function Benefits() {
   const benefits = [
     { t: "왕초보 눈높이", d: "용어부터 차근차근, 처음 시작하는 분도 따라올 수 있게.", p: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m10 9 5 3-5 3z" /></> },
-    { t: "꾸준한 업데이트", d: "시장 흐름과 시즌 이슈를 영상·글로 꾸준히 나눕니다.", p: <path d="M12 2v20M2 12h20" /> },
     { t: "한국 투자자 맞춤", d: "ISA·연금·IRP 등 한국 세금·계좌 현실에 맞춘 설명.", p: <><path d="M4 4h12l4 4v12H4z" /><path d="M8 12h8M8 16h6" /></> },
-    { t: "솔직한 기록", d: "성공만이 아니라 시행착오도 가감 없이 공유합니다.", p: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /> },
+    { t: "복리 중심", d: "큰 한 방이 아니라, 시간과 꾸준함이 만드는 결과에 집중합니다.", p: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></> },
+    { t: "솔직한 기록", d: "성공만이 아니라 시행착오도, 제 포트폴리오도 가감 없이 공개합니다.", p: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /> },
     { t: "원칙 중심", d: "종목 추천이 아니라, 흔들리지 않는 원칙을 함께 세웁니다.", p: <path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6z" /> },
-    { t: "부담 없이", d: "무료로 충분히 보고, 필요할 때만 더 깊이 들어가세요.", p: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></> },
+    { t: "부담 없이", d: "가입도 다운로드도 없이, 필요한 정보를 사이트에서 바로 봅니다.", p: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></> },
   ];
   return (
     <section style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}>
@@ -586,12 +230,20 @@ function Benefits() {
 
 // ── About ─────────────────────────────────────────────────────────────────────
 function About() {
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [photoLoaded, setPhotoLoaded] = useState(false);
+  useEffect(() => {
+    const i = imgRef.current;
+    if (i && i.complete && i.naturalWidth > 0) setPhotoLoaded(true);
+  }, []);
   return (
     <section id="about">
       <div className="wrap about">
         <div className="portrait">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={SITE.avatar} alt="제이슨 일러스트" className="portrait-img" />
+          {!photoLoaded && <img src={SITE.avatar} alt="제이슨 일러스트" className="portrait-img" />}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img ref={imgRef} src={SITE.photo} alt="제이슨" className={`photo-img${photoLoaded ? " on" : ""}`} onLoad={() => setPhotoLoaded(true)} />
         </div>
         <div>
           <div className="eyebrow">제이슨 소개</div>
@@ -603,9 +255,10 @@ function About() {
           <div className="quote">&ldquo;가장 어려운 건 종목을 고르는 게 아니라, 아무것도 하지 않고 버티는 것입니다.&rdquo;</div>
           <p>
             화려한 비법 대신, 좋은 자산을 꾸준히 사서 오래 보유한다는 단순한 원칙을 지키며 제 경험과 시행착오를 솔직하게 기록합니다.
-            이 채널은 종목을 찍어주거나 수익을 보장하는 곳이 아니라, 흔들리지 않고 오래 투자하는 법과 한국 투자자에게 꼭 필요한
+            이 사이트는 종목을 찍어주거나 수익을 보장하는 곳이 아니라, 흔들리지 않고 오래 투자하는 법과 한국 투자자에게 꼭 필요한
             세금·계좌 지식을 함께 공부하는 공간입니다.
           </p>
+          <Channels />
         </div>
       </div>
     </section>
@@ -620,7 +273,7 @@ function Promises() {
     { h: "솔직하게 공유해요", d: "제가 직접 공부하고 겪은 것만. 모르는 건 모른다고 말합니다." },
   ];
   return (
-    <section style={{ paddingTop: 0 }}>
+    <section style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}>
       <div className="wrap">
         <div className="sec-head">
           <div className="eyebrow">약속</div>
@@ -634,7 +287,6 @@ function Promises() {
             </div>
           ))}
         </div>
-        {/* 실제 구독자 후기가 모이면, 위 카드를 후기로 교체해도 좋습니다. */}
       </div>
     </section>
   );
@@ -642,17 +294,16 @@ function Promises() {
 
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 const faqs = [
-  { q: "정말 전부 무료인가요?", a: "네. 현재 영상 콘텐츠, eBook, 뉴스레터는 모두 무료로 이용하실 수 있습니다. 멤버십은 준비가 되면 별도로 안내드릴게요." },
+  { q: "정말 전부 무료인가요?", a: "네. 자료실(ETF 비교·세금 가이드·복리 계산기)을 포함한 모든 콘텐츠를 가입이나 다운로드 없이 사이트에서 바로 보실 수 있습니다." },
   { q: "투자 전문가인가요?", a: "아닙니다. 저는 금융투자업 인가를 받은 전문가가 아니라, 같은 길을 걷는 평범한 투자자입니다. 제 경험과 공부를 나눌 뿐, 종목 추천이나 리딩은 하지 않습니다." },
-  { q: "종목을 추천해 주나요?", a: "하지 않습니다. 이 채널은 '무엇을 사라'가 아니라 '어떻게 흔들리지 않고 오래 투자하느냐'에 집중합니다. 모든 판단과 책임은 본인에게 있습니다." },
-  { q: "멤버십은 언제 오픈하나요?", a: "콘텐츠가 충분히 쌓이면 오픈할 예정입니다. '오픈 알림 받기'로 이메일을 남겨두시면 가장 먼저, 얼리버드 혜택과 함께 알려드립니다." },
+  { q: "종목을 추천해 주나요?", a: "하지 않습니다. 제 포트폴리오를 공개하는 것도 ‘이렇게 굴리고 있다’는 사실 공유일 뿐, 따라 사라는 추천이 아닙니다. 이 사이트는 ‘무엇을 사라’가 아니라 ‘어떻게 흔들리지 않고 오래 투자하느냐’에 집중합니다." },
   { q: "이건 투자 자문인가요?", a: "아닙니다. 모든 콘텐츠는 일반적인 금융·투자 교육 및 정보 제공 목적이며, 특정 종목 추천이나 투자자문이 아닙니다. 투자 판단과 책임은 본인에게 있습니다." },
 ];
 
 function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   return (
-    <section id="faq" style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)" }}>
+    <section id="faq">
       <div className="wrap">
         <div className="sec-head">
           <div className="eyebrow">자주 묻는 질문</div>
@@ -679,169 +330,34 @@ function FinalCTA() {
     <section className="cta-final">
       <div className="wrap">
         <h2>오늘, 흔들리지 않는 투자를 함께 시작해요</h2>
-        <p>무료 가이드를 받고, 새 글과 영상을 이메일로 챙겨보세요. 부담은 전혀 없습니다.</p>
+        <p>복리의 힘과 ETF·세금의 기본기를 사이트에서 차근차근 익혀보세요. 부담은 전혀 없습니다.</p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a className="btn btn-primary" href="#ebook">무료 가이드 받기</a>
-          <a className="btn btn-ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
-            <YouTubeGlyph /> 유튜브 구독하기
-          </a>
+          <Link className="btn btn-primary" href="/start">투자, 어떻게 시작할까</Link>
+          <Link className="btn btn-ghost" href="/tools">복리 계산기 열기</Link>
         </div>
+        <Channels center />
       </div>
     </section>
   );
 }
 
-// ── Footer ────────────────────────────────────────────────────────────────────
-function Footer() {
-  return (
-    <footer>
-      <div className="wrap">
-        <div className="foot-top">
-          <div className="foot-col" style={{ maxWidth: 280 }}>
-            <div className="brand" style={{ fontSize: 18, marginBottom: 8 }}>제이슨의 머니쇼</div>
-            <p className="muted" style={{ fontSize: 13.5 }}>흔들리지 않는 장기투자, 한국 투자자를 위한 미국주식·ETF·절세 이야기.</p>
-          </div>
-          <div className="foot-col">
-            <h5>콘텐츠</h5>
-            <a href="#free">무료 콘텐츠</a>
-            <a href="#portfolio">포트폴리오 트래커</a>
-            <a href="#membership">멤버십</a>
-            <a href="#ebook">무료 eBook</a>
-            <a href="#about">소개</a>
-          </div>
-          <div className="foot-col">
-            <h5>채널</h5>
-            <a href={SITE.youtube} target="_blank" rel="noreferrer noopener">YouTube</a>
-            <a href={SITE.instagram} target="_blank" rel="noreferrer noopener">Instagram</a>
-            <a href="#faq">FAQ</a>
-          </div>
-          <div className="foot-col">
-            <h5>정책</h5>
-            <a href="#">이용약관</a>
-            <a href="#">개인정보처리방침</a>
-            <a href="#">환불 정책</a>
-          </div>
-        </div>
-        <div className="disclaimer">
-          {SITE.contactEmail ? (
-            <>문의: <a href={`mailto:${SITE.contactEmail}`} style={{ textDecoration: "underline" }}>{SITE.contactEmail}</a><br /><br /></>
-          ) : (
-            <>문의는 유튜브·인스타그램 채널 메시지로 받습니다.<br /><br /></>
-          )}
-          본 사이트의 모든 콘텐츠는 일반적인 정보 제공 및 교육 목적이며, 특정 종목의 매수·매도 추천이나 투자자문이 아닙니다. 운영자는 자본시장법상 금융투자업(투자자문업 등) 인가·등록을 받은 자가 아니며, 콘텐츠는 어떠한 수익도 보장하지 않습니다. 모든 투자 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다. © 2026 제이슨의 머니쇼.
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// ── YouTube Lightbox ────────────────────────────────────────────────────────────
-function VideoLightbox({ videoId, onClose }: { videoId: string | null; onClose: () => void }) {
-  useEffect(() => {
-    if (!videoId) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [videoId, onClose]);
-
-  if (!videoId) return null;
-  return (
-    <div className="yt-bg show" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="yt-box">
-        <button className="yt-close" onClick={onClose} aria-label="close">&times;</button>
-        <div className="yt-frame">
-          <iframe
-            src={ytEmbed(videoId)}
-            title="YouTube video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Waitlist Modal ──────────────────────────────────────────────────────────────
-function WaitlistModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [email, setEmail] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(false);
-
-  if (!open) return null;
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || busy) return;
-    setBusy(true);
-    const ok = await subscribeEmail(email, "waitlist");
-    setBusy(false);
-    if (ok) { setDone(true); setEmail(""); }
-  };
-
-  return (
-    <div className="modal-bg show" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal">
-        <button className="x" onClick={onClose} aria-label="close">&times;</button>
-        <div className="eyebrow">멤버십 · 곧 오픈</div>
-        <h3>오픈하면 가장 먼저 알려드릴게요</h3>
-        {done ? (
-          <p style={{ marginBottom: 0 }}>
-            ✓ 등록되었습니다! 멤버십이 열리면 얼리버드 혜택과 함께 이메일로 안내드릴게요.
-            {!SITE.emailFormAction && <span className="muted"> (데모 — 이메일 폼 연결 시 실제 저장됩니다)</span>}
-          </p>
-        ) : (
-          <>
-            <p>이메일을 남겨두시면 멤버십 오픈 소식과 얼리버드 혜택을 가장 먼저 보내드립니다.</p>
-            <form className="lead-form" onSubmit={submit} style={{ flexDirection: "column", alignItems: "stretch" }}>
-              <input
-                type="email"
-                placeholder="이메일 주소"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ background: "var(--card)", color: "var(--ink)", border: "1px solid var(--hair2)", minWidth: 0, width: "100%", marginBottom: 10 }}
-              />
-              <button className="btn btn-primary btn-block" type="submit" disabled={busy}>
-                {busy ? "등록 중…" : "오픈 알림 받기"}
-              </button>
-            </form>
-            <p className="muted" style={{ fontSize: 12, textAlign: "center", marginTop: 12, marginBottom: 0 }}>
-              스팸 없이 오픈 소식만 보내드려요. 언제든 수신 거부할 수 있습니다.
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [playingId, setPlayingId] = useState<string | null>(null);
-  const [waitlistOpen, setWaitlistOpen] = useState(false);
-  const play = useCallback((id: string) => setPlayingId(id), []);
-  const openWaitlist = useCallback(() => setWaitlistOpen(true), []);
-
   return (
     <>
       <a id="top" />
-      <Navbar />
+      <Nav active="/" />
       <Hero />
       <HonestBar />
-      <FreeContent onPlay={play} />
-      <LeadMagnet />
+      <ResourceHub />
+      <BuffettQuote />
       <PortfolioSection />
-      <PremiumSection onWaitlist={openWaitlist} />
-      <Pricing onWaitlist={openWaitlist} />
       <Benefits />
       <About />
       <Promises />
       <FAQ />
       <FinalCTA />
       <Footer />
-      <VideoLightbox videoId={playingId} onClose={() => setPlayingId(null)} />
-      <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
     </>
   );
 }

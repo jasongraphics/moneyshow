@@ -7,11 +7,11 @@ const SITE_URL = "https://moneyshow-hazel.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "제이슨의 머니쇼 — 흔들리지 않는 투자",
+    default: "제이슨의 머니쇼 · 흔들리지 않는 투자",
     template: "%s · 제이슨의 머니쇼",
   },
   description:
-    "전문가의 비법이 아니라, 같은 길을 걷는 평범한 투자자의 기록. 미국주식·ETF·절세를 왕초보 눈높이로. 무료 영상과 뉴스레터로 시작하세요.",
+    "전문가의 비법이 아니라, 같은 길을 걷는 평범한 투자자의 기록. 미국주식·ETF·절세와 복리의 힘을 왕초보 눈높이로, 가입 없이 사이트에서 바로 공부하세요.",
   keywords: ["미국주식", "ETF", "절세", "ISA", "연금저축", "IRP", "장기투자", "배당", "제이슨의 머니쇼", "투자 입문"],
   authors: [{ name: "제이슨" }],
   alternates: { canonical: "/" },
@@ -20,13 +20,13 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: SITE_URL,
     siteName: "제이슨의 머니쇼",
-    title: "제이슨의 머니쇼 — 흔들리지 않는 투자",
+    title: "제이슨의 머니쇼 · 흔들리지 않는 투자",
     description:
-      "같은 길을 걷는 평범한 투자자의 기록. 미국주식·ETF·절세를 왕초보 눈높이로. 무료 영상과 뉴스레터로 시작하세요.",
+      "같은 길을 걷는 평범한 투자자의 기록. 미국주식·ETF·절세와 복리의 힘을 왕초보 눈높이로, 가입 없이 사이트에서 바로 공부하세요.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "제이슨의 머니쇼 — 흔들리지 않는 투자",
+    title: "제이슨의 머니쇼 · 흔들리지 않는 투자",
     description: "같은 길을 걷는 평범한 투자자의 미국주식·ETF·절세 기록.",
   },
   robots: { index: true, follow: true },
