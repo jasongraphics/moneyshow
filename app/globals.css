@@ -337,7 +337,7 @@ footer { padding: 54px 0 40px; border-top: 1px solid var(--hair); font-size: 14p
 .section-rule { border: 0; border-top: 1px solid var(--hair); margin: 0; }
 
 /* tag chip */
-.chip { display: inline-block; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: .3px; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--hair2); background: var(--card); color: var(--ink2); }
+.chip { display: inline-block; white-space: nowrap; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: .3px; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--hair2); background: var(--card); color: var(--ink2); }
 .chip.kr { color: #0e7a52; border-color: #c3e3d4; background: #ecf6f1; }
 .chip.us { color: #2f6a93; border-color: #cddeeb; background: #eef4f9; }
 
