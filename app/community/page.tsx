@@ -93,7 +93,7 @@ export default async function CommunityPage() {
               <span className="community-live"><i className="dot" /> 지금 {online}명 접속 중</span>
             ) : null}
           </div>
-          <p className="muted" style={{ fontSize: 12.5, marginTop: 12 }}>지금은 무료로 열려 있어요. 부담 없이 들어와서 구경만 해도 괜찮아요.</p>
+          <p className="muted" style={{ fontSize: 12.5, marginTop: 12 }}>지금은 무료로 열려 있어요. 언젠가 유료로 바뀔 수 있으니, 초기 멤버로 지금 들어오면 좋아요.</p>
         </div>
       </header>
 
