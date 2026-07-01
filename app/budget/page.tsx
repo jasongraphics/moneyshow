@@ -22,12 +22,12 @@ function Check() {
 }
 
 const FEATURES: { t: string; d: string }[] = [
-  { t: "설정 한 번 = 12개월 자동", d: "수입원·고정지출·지출 카테고리·저축 목표를 ‘설정’ 시트에 한 번만 적으면, 1월부터 12월까지 모든 시트에 그대로 나타나요." },
-  { t: "30초 입력", d: "쓴 날짜·분류·금액만 적으면 끝. 분류는 칸을 누르면 목록에서 톡 고르면 됩니다." },
-  { t: "이번 달 한눈에", d: "총수입·총지출·저축·남은 돈이 자동으로 계산돼요. 카드값 메우느라 정신없던 한 달이 정리됩니다." },
-  { t: "카테고리별 자동 집계", d: "식비·외식·교통·통신비… 어디에 얼마 썼는지 카테고리별로 자동 합산되고, 도넛 그래프로 한눈에 보여요." },
-  { t: "연간 대시보드", d: "월별 수입·지출·저축이 막대그래프로 쌓입니다. 1년 동안 얼마나 모았는지 흐름이 보여요." },
-  { t: "한국 가구 기준", d: "전세·월세·관리비·통신비·청약·경조사 등 우리 실정에 맞는 항목과 원(₩) 단위로 처음부터 세팅돼 있어요." },
+  { t: "설정 한 번 = 12개월 자동", d: "수입원·고정지출·카테고리·저축 목표를 ‘설정’ 시트에 한 번만 적으면, 1월부터 12월까지 그대로 반영돼요." },
+  { t: "예산 vs 사용 한눈에", d: "카테고리마다 예산을 잡고 실제 사용액과 자동 비교. 이번 달 총수입·총지출·남은 돈이 맨 위에 딱 뜹니다." },
+  { t: "순자산 트래커", d: "자산에서 부채를 뺀 ‘진짜 내 재산’을 매달 기록하면, 1년 순자산 추이가 그래프로 그려져요." },
+  { t: "구독·고정지출 관리", d: "넷플릭스부터 헬스장까지 새는 구독을 한곳에. 연 결제는 월로 환산해 매달 얼마 빠지는지 정확히 보여줍니다." },
+  { t: "저축 목표 진행률", d: "목표금액·목표일을 정하면 진행률과 진행바가 자동. 비상금·내집마련·여행자금을 눈으로 좇아요." },
+  { t: "연간 대시보드 + 차트", d: "월별 수입·지출·저축이 그래프로 쌓여요. 한국 가구 기준(전세·청약·관리비) 항목과 원(₩)으로 세팅됩니다." },
 ];
 
 const STEPS: { n: string; t: string; d: string }[] = [
@@ -55,8 +55,8 @@ export default async function BudgetPage({
           </div>
           <h1>{PRODUCT.name}</h1>
           <p className="lede">
-            돈이 어디로 가는지 한눈에. <strong>설정 한 번이면 12개월이 자동</strong>으로 채워지는 한국형 가계부예요.
-            구글 시트나 엑셀로 바로 쓰고, 카테고리별 지출과 1년 흐름까지 그래프로 봅니다.
+            가계부 하나로 <strong>예산·저축·순자산·구독</strong>까지. <strong>설정 한 번이면 12개월이 자동</strong>으로
+            채워지는 올인원 한국형 가계부예요. 구글 시트나 엑셀로 바로 쓰고, 1년 흐름을 그래프로 봅니다.
           </p>
 
           {canceled ? (
@@ -144,7 +144,7 @@ export default async function BudgetPage({
           <div className="rhead">
             <div className="eyebrow">구성</div>
             <h2>무엇이 들어있나요</h2>
-            <p>시작하기 · 설정 · 연간 대시보드 + 1~12월, 모두 15개 시트.</p>
+            <p>가계부·순자산·저축 목표·구독 관리까지, 서로 연결된 19개 시트.</p>
           </div>
           <div className="bgt-feat-grid">
             {FEATURES.map((f) => (
@@ -179,8 +179,42 @@ export default async function BudgetPage({
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 받는 방법 */}
       <section className="rsec">
+        <div className="wrap">
+          <div className="rhead">
+            <div className="eyebrow">받는 방법</div>
+            <h2>결제하면 이렇게 받아요</h2>
+            <p>구글 시트 ‘사본 만들기’ 링크로 30초 만에 내 것이 됩니다.</p>
+          </div>
+          <div className="bgt-steps">
+            <div className="bgt-step">
+              <div className="bgt-step-n">1</div>
+              <div>
+                <div className="bgt-step-t">결제 완료</div>
+                <p className="bgt-step-d">결제가 끝나면 곧바로 구글 시트 ‘사본 만들기’ 링크가 나와요. 결제 영수증도 이메일로 받습니다.</p>
+              </div>
+            </div>
+            <div className="bgt-step">
+              <div className="bgt-step-n">2</div>
+              <div>
+                <div className="bgt-step-t">사본 만들기</div>
+                <p className="bgt-step-d">링크를 누르면 내 구글 드라이브에 내 사본이 생겨요. (구글 로그인 필요) 온전히 내 것이라 자유롭게 고쳐 씁니다.</p>
+              </div>
+            </div>
+            <div className="bgt-step">
+              <div className="bgt-step-n">3</div>
+              <div>
+                <div className="bgt-step-t">엑셀로도 OK</div>
+                <p className="bgt-step-d">엑셀이 편하면 구글 시트에서 파일 → 다운로드 → Microsoft Excel 로 받아서 쓰면 됩니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="rsec tight" style={{ background: "var(--paper2)", borderTop: "1px solid var(--hair)", borderBottom: "1px solid var(--hair)" }}>
         <div className="wrap">
           <div className="rhead">
             <div className="eyebrow">자주 묻는 질문</div>

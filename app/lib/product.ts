@@ -25,7 +25,11 @@ export const PRODUCT = {
 export const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || "price_1ToAnY7WIuqBWZw2v2BbqWnM";
 export const BUDGET_SHEET_COPY_URL = process.env.BUDGET_SHEET_COPY_URL || "";
 
-/** 결제 기능이 켜져 있는지 — 서버 키와 가격 ID가 모두 있어야 합니다. (서버에서만 신뢰 가능) */
+/**
+ * 결제 기능이 켜져 있는지. 안전장치로 '전달할 시트 링크(BUDGET_SHEET_COPY_URL)'까지
+ * 있어야 결제가 열립니다 — 즉 배송(시트 링크) 준비가 안 되면 돈을 받지 않습니다.
+ * (서버에서만 신뢰 가능)
+ */
 export function isCheckoutConfigured(): boolean {
-  return Boolean(process.env.STRIPE_SECRET_KEY && STRIPE_PRICE_ID);
+  return Boolean(process.env.STRIPE_SECRET_KEY && STRIPE_PRICE_ID && BUDGET_SHEET_COPY_URL);
 }
