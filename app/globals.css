@@ -674,6 +674,9 @@ table.dtable { width: 100%; border-collapse: collapse; font-size: 14.5px; min-wi
 .lt-btn.discord { background: #5865F2; color: #fff; border-color: #5865F2; }
 .lt-btn.discord:hover { background: #4752c4; border-color: #4752c4; transform: translateY(-2px); }
 
+/* 커뮤니티(함께) 강조 하이라이터 */
+.hl-together { background: linear-gradient(transparent 58%, rgba(14,122,82,0.22) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 3px; border-radius: 2px; }
+
 .community-band { background: var(--paper2); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); padding: 56px 0; }
 .community-inner { max-width: 720px; margin: 0 auto; text-align: center; }
 .community-inner h2 { font-family: var(--serif); font-size: 27px; color: var(--ink); margin: 6px 0 12px; letter-spacing: -0.01em; }

@@ -81,7 +81,7 @@ export default async function CommunityPage() {
           <div className="crumb">
             <Link href="/">홈</Link><span className="sep">›</span><span>커뮤니티</span>
           </div>
-          <h1>혼자 하면 흔들려요. 같이 하면 오래 갑니다</h1>
+          <h1>혼자 하면 흔들려요. <span className="hl-together">같이 하면 오래 갑니다</span></h1>
           <p className="lede">
             혼자 투자하면 작은 뉴스에도 마음이 흔들려요. 같은 길을 걷는 사람들과 이야기하면 조금 더 오래, 덜 흔들리며
             갈 수 있습니다. <strong>종목을 찍어주는 곳이 아니라, 함께 공부하고 버티는 무료 디스코드</strong>예요.
