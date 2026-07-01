@@ -333,8 +333,8 @@ function Community() {
           <div className="eyebrow">커뮤니티 · 무료</div>
           <h2>혼자 하면 흔들려요. <span className="hl-together">같이 하면 오래 갑니다</span></h2>
           <p>
-            제이슨의 머니쇼 디스코드는 종목 찍어주는 리딩방이 아니에요. 미국주식·ETF·절세·복리를 편하게 묻고,
-            서로의 경험과 실수를 나누며 오래 투자하는 사람들의 모임입니다. 지금은 무료로 열려 있어요.
+            제이슨의 머니쇼 디스코드는 종목 찍어주는 리딩방이 아니에요. 투자·재테크 생각을 자유롭게 나누고,
+            경제적 자유를 향한 각자의 여정을 함께 나누는 무료 커뮤니티입니다. 지금은 누구나 무료로 참여할 수 있어요.
           </p>
           <div className="community-cta">
             <a className="btn-discord" href={DISCORD.invite} target="_blank" rel="noreferrer noopener">

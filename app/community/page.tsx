@@ -7,7 +7,7 @@ import { DISCORD } from "../lib/site";
 export const metadata: Metadata = {
   title: "커뮤니티 · 흔들리지 않는 투자, 같이 공부해요",
   description:
-    "제이슨의 머니쇼 디스코드. 종목 찍어주는 리딩방이 아니라, 미국주식·ETF·절세·복리를 편하게 묻고 서로의 경험을 나누는 무료 커뮤니티입니다.",
+    "제이슨의 머니쇼 디스코드. 종목 찍어주는 리딩방이 아니라, 투자·재테크 생각을 자유롭게 나누고 경제적 자유를 향한 각자의 여정을 함께 나누는 무료 커뮤니티입니다.",
   alternates: { canonical: "/community" },
 };
 
@@ -34,11 +34,11 @@ async function getOnlineCount(): Promise<number | null> {
 }
 
 const TALK = [
-  "첫 계좌·첫 ETF, 뭐부터 사야 할지 막막할 때",
-  "ISA·연금저축·IRP 절세계좌를 어떤 순서로 채울지",
-  "하락장에서 안 흔들리고 버티는 법",
-  "가계부·저축 인증하며 같이 습관 만들기",
-  "배당·복리·환율 같은 기본기 Q&A",
+  "첫 계좌·첫 ETF, 뭐부터 시작할지 서로의 경험 나누기",
+  "ISA·연금저축·IRP 절세계좌 활용법 공유하기",
+  "시장이 출렁일 때, 각자의 원칙과 마음가짐 나누기",
+  "가계부·저축 인증하며 함께 습관 만들기",
+  "경제적 자유를 향한 각자의 목표와 진행 상황 나누기",
 ];
 
 const NOT = [
@@ -83,8 +83,9 @@ export default async function CommunityPage() {
           </div>
           <h1>혼자 하면 흔들려요. <span className="hl-together">같이 하면 오래 갑니다</span></h1>
           <p className="lede">
-            혼자 투자하면 작은 뉴스에도 마음이 흔들려요. 같은 길을 걷는 사람들과 이야기하면 조금 더 오래, 덜 흔들리며
-            갈 수 있습니다. <strong>종목을 찍어주는 곳이 아니라, 함께 공부하고 버티는 무료 디스코드</strong>예요.
+            혼자 투자하면 작은 뉴스에도 마음이 흔들려요. 같은 목표를 가진 사람들과 생각을 나누면 훨씬 든든합니다.
+            <strong> 종목을 찍어주는 곳이 아니라, 투자·재테크 생각을 자유롭게 나누고 경제적 자유를 향한 각자의 여정을
+            함께 나누는 무료 디스코드</strong>예요.
           </p>
           <div style={{ marginTop: 20, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <JoinButton />
@@ -101,7 +102,7 @@ export default async function CommunityPage() {
         <div className="wrap">
           <div className="rhead">
             <div className="eyebrow">이런 이야기를 나눠요</div>
-            <h2>왕초보 질문, 대환영이에요</h2>
+            <h2>왕초보도 부담 없이, 함께 나눠요</h2>
           </div>
           <ul className="community-list" style={{ maxWidth: 720 }}>
             {TALK.map((t) => (
