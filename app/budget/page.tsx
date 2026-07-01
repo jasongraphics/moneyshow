@@ -80,41 +80,14 @@ export default async function BudgetPage({
           <div className="rhead">
             <div className="eyebrow">미리보기</div>
             <h2>이런 모습이에요</h2>
-            <p>매달 시트 맨 위에서, 이번 달이 한눈에 정리됩니다.</p>
+            <p>실제 ‘1월’ 시트 화면이에요. 수입·고정지출·변동지출·저축, 카테고리별 예산 vs 사용까지 한 페이지에.</p>
           </div>
 
-          <div className="bgt-preview">
-            <div className="bgt-pv-head">3월 가계부 · 이번 달 한눈에</div>
-            <div className="bgt-kpis">
-              {[
-                { l: "총수입", v: "₩3,500,000", pos: true },
-                { l: "총지출", v: "₩1,017,000" },
-                { l: "저축·투자", v: "₩400,000", pos: true },
-                { l: "남은 돈", v: "₩2,083,000", strong: true },
-              ].map((k) => (
-                <div key={k.l} className="bgt-kpi">
-                  <span className="bgt-kpi-l">{k.l}</span>
-                  <span className="bgt-kpi-v" style={{ color: k.strong ? "#1b1915" : k.pos === false ? "#1b1915" : "#0b5c3e" }}>{k.v}</span>
-                </div>
-              ))}
-            </div>
-            <div className="bgt-pv-sub">카테고리별 지출</div>
-            <div className="bgt-bars">
-              {[
-                { l: "식비", w: 88, v: "₩320,000" },
-                { l: "외식·카페", w: 60, v: "₩214,000" },
-                { l: "교통", w: 34, v: "₩121,000" },
-                { l: "통신", w: 18, v: "₩66,000" },
-              ].map((b) => (
-                <div key={b.l} className="bgt-bar-row">
-                  <span className="bgt-bar-l">{b.l}</span>
-                  <span className="bgt-bar-track"><i style={{ width: `${b.w}%` }} /></span>
-                  <span className="bgt-bar-v">{b.v}</span>
-                </div>
-              ))}
-            </div>
-            <p className="bgt-pv-note">※ 예시 숫자입니다. 실제로는 입력한 내용에 따라 자동으로 계산돼요.</p>
-          </div>
+          <a className="bgt-shot" href="/budget-preview-jan.webp" target="_blank" rel="noreferrer noopener">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/budget-preview-jan.webp" alt="제이슨의 머니쇼 가계부 2026 · 실제 1월 시트 미리보기" loading="lazy" />
+          </a>
+          <p className="bgt-shot-cap">실제 ‘1월’ 시트 · 탭하면 크게 볼 수 있어요</p>
         </div>
       </section>
 
