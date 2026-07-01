@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE, DISCLAIMER } from "../lib/site";
+import { SITE, DISCLAIMER, DISCORD } from "../lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "제이슨의 머니쇼 · 링크" },
@@ -49,6 +49,7 @@ export default function LinksPage() {
 
         <nav className="lt-links">
           <a className="lt-btn primary" href="/">📈 흔들리지 않는 투자 · 무료 자료실</a>
+          <a className="lt-btn discord" href={DISCORD.invite} target="_blank" rel="noreferrer noopener">💬 디스코드 커뮤니티 · 무료</a>
           <a className="lt-btn feature" href="/budget">📒 가계부 템플릿 2026 · ₩9,900</a>
           <a className="lt-btn ghost" href={SITE.youtube} target="_blank" rel="noreferrer noopener">
             ▶️ 유튜브 · 제이슨의 머니쇼

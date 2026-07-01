@@ -5,7 +5,7 @@ import Nav from "./_components/Nav";
 import Footer from "./_components/Footer";
 import NetWorthGraph from "./_components/NetWorthGraph";
 import PortfolioPie from "./_components/PortfolioPie";
-import { SITE, CHANNELS } from "./lib/site";
+import { SITE, CHANNELS, DISCORD } from "./lib/site";
 import { useState, useEffect, useRef } from "react";
 
 // ── SVG helpers ──────────────────────────────────────────────────────────────
@@ -325,6 +325,32 @@ function FAQ() {
 }
 
 // ── Final CTA ─────────────────────────────────────────────────────────────────
+function Community() {
+  return (
+    <section className="community-band">
+      <div className="wrap">
+        <div className="community-inner">
+          <div className="eyebrow">커뮤니티 · 무료</div>
+          <h2>혼자 하면 흔들려요. 같이 하면 오래 갑니다</h2>
+          <p>
+            제이슨의 머니쇼 디스코드는 종목 찍어주는 리딩방이 아니에요. 미국주식·ETF·절세·복리를 편하게 묻고,
+            서로의 경험과 실수를 나누며 오래 투자하는 사람들의 모임입니다. 지금은 무료로 열려 있어요.
+          </p>
+          <div className="community-cta">
+            <a className="btn-discord" href={DISCORD.invite} target="_blank" rel="noreferrer noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.25.5a14.6 14.6 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14.9 0A14.6 14.6 0 0 1 8.85 3.5L8.6 3a19.8 19.8 0 0 0-4.9 1.4C.9 8.6.14 12.7.5 16.7a19.9 19.9 0 0 0 6 3l.73-1a13 13 0 0 1-1.9-.9c.16-.12.32-.24.47-.36a14.2 14.2 0 0 0 12.4 0c.15.13.31.25.47.36-.6.36-1.24.66-1.9.9l.73 1a19.8 19.8 0 0 0 6-3c.43-4.6-.74-8.7-3.9-12.3ZM8.55 14.3c-1.16 0-2.12-1.07-2.12-2.38 0-1.31.94-2.38 2.12-2.38 1.19 0 2.14 1.08 2.12 2.38 0 1.31-.94 2.38-2.12 2.38Zm6.9 0c-1.16 0-2.12-1.07-2.12-2.38 0-1.31.94-2.38 2.12-2.38 1.19 0 2.14 1.08 2.12 2.38 0 1.31-.93 2.38-2.12 2.38Z" />
+              </svg>
+              디스코드 무료로 참여하기
+            </a>
+            <Link className="btn btn-ghost" href="/community">커뮤니티 살펴보기</Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FinalCTA() {
   return (
     <section className="cta-final">
@@ -350,6 +376,7 @@ export default function Home() {
       <Hero />
       <HonestBar />
       <ResourceHub />
+      <Community />
       <BuffettQuote />
       <PortfolioSection />
       <Benefits />

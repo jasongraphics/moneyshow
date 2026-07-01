@@ -30,6 +30,13 @@ export const SITE = {
 // ───────────────────────────────────────────────────────────────────────────
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-WNG4JJ8S62";
 
+// 디스코드 커뮤니티. invite = 영구 초대 링크, serverId = 위젯(실시간 접속자 수)용.
+// 실시간 접속자 수를 보여주려면 디스코드에서 서버 설정 → 위젯 → '서버 위젯 활성화'를 켜세요.
+export const DISCORD = {
+  invite: "https://discord.gg/nvSTqNEfNa",
+  serverId: "1325898843052572693",
+};
+
 // SNS 채널. 메인 CTA가 아니라 "이런 곳에서 활동해요" 목록으로 노출됩니다.
 export const CHANNELS: { type: "youtube" | "instagram"; label: string; handle: string; href: string }[] = [
   { type: "youtube", label: "YouTube", handle: "@Jasonsmoneyshow", href: SITE.youtube },
@@ -42,6 +49,7 @@ export const NAV: { href: string; label: string }[] = [
   { href: "/etfs", label: "ETF 자료실" },
   { href: "/tools", label: "복리 계산기" },
   { href: "/tax", label: "세금 가이드" },
+  { href: "/community", label: "커뮤니티" },
   { href: "/#portfolio", label: "포트폴리오" },
 ];
 
